@@ -1,0 +1,11 @@
+# KiCad backup folders
+*-backups/
+
+# KiCad local preferences
+*.kicad_prl
+
+# Board2PDF config
+board2pdf.config.ini
+
+# Plot files
+*.plt
