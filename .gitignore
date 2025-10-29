@@ -9,3 +9,11 @@ board2pdf.config.ini
 
 # Plot files
 *.plt
+
+# Generated outputs
+*.pdf
+plots/
+bom/
+
+# KiCad cache files
+fp-info-cache
