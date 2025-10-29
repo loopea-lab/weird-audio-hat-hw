@@ -15,5 +15,9 @@ board2pdf.config.ini
 plots/
 bom/
 
+# But allow everything in releases/ folder
+!releases/
+!releases/**
+
 # KiCad cache files
 fp-info-cache
