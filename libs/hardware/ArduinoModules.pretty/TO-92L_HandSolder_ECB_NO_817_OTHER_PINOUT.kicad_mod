@@ -1,0 +1,268 @@
+(footprint "TO-92L_HandSolder_ECB_NO_817_OTHER_PINOUT"
+	(version 20240108)
+	(generator "pcbnew")
+	(generator_version "8.0")
+	(layer "F.Cu")
+	(descr "TO-92L leads in-line (large body variant of TO-92), also known as TO-226, wide, drill 0.75mm, hand-soldering variant with enlarged pads (see https://www.diodes.com/assets/Package-Files/TO92L.pdf and http://www.ti.com/lit/an/snoa059/snoa059.pdf)")
+	(tags "to-92 sc-43 sc-43a sot54 PA33 transistor")
+	(property "Reference" "REF**"
+		(at 1.27 -3.8 0)
+		(layer "F.SilkS")
+		(uuid "7e26cce2-74e3-43e1-a569-d6d31506f265")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "TO-92L_HandSolder_ECB_NO_817_OTHER_PINOUT"
+		(at 1.27 2.79 0)
+		(layer "F.Fab")
+		(uuid "d8cc5924-7c02-4a82-8c8e-0dd6abb50f76")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "33b79796-d226-4b99-99fd-b5b6e27551c5")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "56c89df0-635d-480a-978f-6a5b8f7a3961")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "59f08b2d-c789-4c68-8cb9-78d159cd9248")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(attr through_hole)
+	(fp_line
+		(start -0.53 1.85)
+		(end 3.07 1.85)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "a06e2ba3-0568-4852-945e-c9bd4be883e3")
+	)
+	(fp_arc
+		(start -0.541453 1.842156)
+		(mid -1.247298 -0.581475)
+		(end 0.45 -2.45)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "88c226cc-c562-46e1-b3bd-86bd499eb4e4")
+	)
+	(fp_arc
+		(start 2.05 -2.45)
+		(mid 3.769931 -0.601036)
+		(end 3.078445 1.827684)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "79dad4ba-9792-4e7d-8368-3af57e524fc9")
+	)
+	(fp_line
+		(start -1.45 -3.05)
+		(end -1.46 2.01)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "0f2d43e0-5dec-4c8d-b679-88043c093837")
+	)
+	(fp_line
+		(start -1.45 -3.05)
+		(end 4 -3.05)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "081ec974-f261-4386-b53d-b332ee7d5739")
+	)
+	(fp_line
+		(start 4 2.01)
+		(end -1.46 2.01)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "97cb178f-c88f-4a43-bee1-24b0b6d8aece")
+	)
+	(fp_line
+		(start 4 2.01)
+		(end 4 -3.05)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "1775e389-3411-4162-9cec-f534ffa31f1c")
+	)
+	(fp_line
+		(start -0.5 1.75)
+		(end 3 1.75)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "9cc9e706-2285-4486-8f68-2ada67f886c2")
+	)
+	(fp_arc
+		(start -0.483625 1.753625)
+		(mid -1.021221 -0.949055)
+		(end 1.27 -2.48)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "54817371-b67c-40bf-901d-a62039508b64")
+	)
+	(fp_arc
+		(start 1.27 -2.48)
+		(mid 3.561221 -0.949055)
+		(end 3.023625 1.753625)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "4ce0af1e-88da-4f4d-bcad-38123980fe48")
+	)
+	(fp_text user "C"
+		(at 0.55 -0.55 90)
+		(unlocked yes)
+		(layer "Eco1.User")
+		(uuid "17a5893f-fe00-4474-a35c-4c11e83c70aa")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.2)
+				(bold yes)
+			)
+			(justify left bottom)
+		)
+	)
+	(fp_text user "B"
+		(at 1.9 0.6 90)
+		(unlocked yes)
+		(layer "Eco1.User")
+		(uuid "55cab2a5-7f8c-4947-870e-3774815042c7")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.2)
+				(bold yes)
+			)
+			(justify left bottom)
+		)
+	)
+	(fp_text user "E"
+		(at 3.3 -0.55 90)
+		(unlocked yes)
+		(layer "Eco1.User")
+		(uuid "a2c469ae-3e6d-47b5-93ff-5c4b5e021826")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.2)
+				(bold yes)
+			)
+			(justify left bottom)
+		)
+	)
+	(fp_text user "${REFERENCE}"
+		(at 1.27 0 0)
+		(layer "F.Fab")
+		(uuid "0daa64f1-a6e0-4c22-a813-3c9685a11399")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" thru_hole roundrect
+		(at 2.54 0.1)
+		(size 1.3 1.8)
+		(drill 0.8
+			(offset 0 0.25)
+		)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(roundrect_rratio 0.2692307692)
+		(uuid "9aa81d02-1e03-4554-8474-44ce03a29bce")
+	)
+	(pad "2" thru_hole roundrect
+		(at 1.27 -1.5)
+		(size 1.3 1.8)
+		(drill 0.8
+			(offset 0 -0.2)
+		)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(roundrect_rratio 0.2692307692)
+		(uuid "eba81709-7084-4eec-8b39-981bd6a486b3")
+	)
+	(pad "3" thru_hole roundrect
+		(at 0 0.1)
+		(size 1.3 1.8)
+		(drill 0.8
+			(offset 0 0.25)
+		)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(roundrect_rratio 0.2692307692)
+		(uuid "b7a2c4d2-c8d0-40df-9062-f0ad222792ae")
+	)
+	(model "${KISYS3DMOD}/Package_TO_SOT_THT.3dshapes/TO-92L.wrl"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)
