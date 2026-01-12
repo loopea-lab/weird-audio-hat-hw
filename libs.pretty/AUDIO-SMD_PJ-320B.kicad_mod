@@ -1,0 +1,294 @@
+(footprint "AUDIO-SMD_PJ-320B"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 0 -7.5 0)
+		(layer "F.SilkS")
+		(uuid "fc859665-b7e7-462d-bec2-1c82f80a214b")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "AUDIO-SMD_PJ-320B"
+		(at 0 7.5 0)
+		(layer "F.Fab")
+		(uuid "fc75e85b-30f4-478b-a8ad-49ae84794b8e")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f95cc2f1-14ea-4db4-b214-bf9ba57142e4")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2799318e-6762-4c1e-bbfc-70939f4d8360")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -3 -5.6)
+		(end -3 -4.48)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "d4330815-7c8d-4a75-bd04-d5f0b70f06e8")
+	)
+	(fp_line
+		(start -3 -5.6)
+		(end 3 -5.6)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "381034b7-f489-4021-9503-e40a23a0079d")
+	)
+	(fp_line
+		(start -3 -2.52)
+		(end -3 2.52)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "7a212fa4-7f92-4ad6-85af-deafe02db151")
+	)
+	(fp_line
+		(start -3 4.48)
+		(end -3 5.4)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "86b6a030-474d-443a-81e9-1a003664754f")
+	)
+	(fp_line
+		(start -2.5 -8.6)
+		(end 2.5 -8.6)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "29998139-a653-4fe3-a73c-47660d38e7ac")
+	)
+	(fp_line
+		(start -2.5 -5.6)
+		(end -2.5 -8.6)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "4ef833ae-1f5a-413d-a615-8ac45438b42c")
+	)
+	(fp_line
+		(start 2.3 3.4)
+		(end 2.3 4.6)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "7cfbec98-1d1d-40e0-8db1-06229740327e")
+	)
+	(fp_line
+		(start 2.3 4.6)
+		(end 3 4.6)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "ab1ca1a7-2b76-414b-b289-932a47d83d66")
+	)
+	(fp_line
+		(start 2.5 -5.6)
+		(end 2.5 -8.6)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "03e71d15-e83f-4252-9d7e-e7ad5b24d544")
+	)
+	(fp_line
+		(start 3 -5.6)
+		(end 3 -2.48)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "9f3b146c-47cf-44a4-a9d2-7f6488947d01")
+	)
+	(fp_line
+		(start 3 -0.52)
+		(end 3 3.4)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "ea9ba6b8-689c-48fc-8e01-ec46c9b599e9")
+	)
+	(fp_line
+		(start 3 3.4)
+		(end 2.3 3.4)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "ecc10318-d8bf-4ba9-b4d6-449c8dbe40a8")
+	)
+	(fp_line
+		(start 3 4.6)
+		(end 3 5.4)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "78c955d1-95e9-4aa8-8873-eda155438f5e")
+	)
+	(fp_line
+		(start 3 5.4)
+		(end -3 5.4)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "f298723d-1d92-45c4-a8ca-13b79a47f3d3")
+	)
+	(fp_circle
+		(center -5.26 -3.44)
+		(end -5.06 -3.44)
+		(stroke
+			(width 0.4)
+			(type solid)
+		)
+		(fill no)
+		(layer "Cmts.User")
+		(uuid "8daf21cd-a2bc-4614-977f-9c8e7b424d50")
+	)
+	(fp_circle
+		(center 0 -3.6)
+		(end 0.18 -3.6)
+		(stroke
+			(width 0.35)
+			(type solid)
+		)
+		(fill no)
+		(layer "Cmts.User")
+		(uuid "04f68fce-2f39-46d6-964f-78321eb2c9fd")
+	)
+	(fp_circle
+		(center 0 2.4)
+		(end 0.18 2.4)
+		(stroke
+			(width 0.35)
+			(type solid)
+		)
+		(fill no)
+		(layer "Cmts.User")
+		(uuid "033ed996-58ed-40a0-8931-28a88e7cd86d")
+	)
+	(fp_circle
+		(center -4.5 -8.6)
+		(end -4.47 -8.6)
+		(stroke
+			(width 0.06)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "83cf67dc-8b47-4d57-83dd-ee19331567ae")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "257157b9-c870-40d3-95f9-dd1d9d84896c")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "" thru_hole circle
+		(at 0 -3.6)
+		(size 1.3 1.3)
+		(drill 1.3)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "cad2e385-f66b-4c47-8b05-71d7829bb4fe")
+	)
+	(pad "" thru_hole circle
+		(at 0 2.4)
+		(size 1.3 1.3)
+		(drill 1.3)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "8be27d92-1f04-446f-9f2a-af7f23f562e1")
+	)
+	(pad "R" smd rect
+		(at 4 -1.5)
+		(size 3 1.5)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "2b5e407c-359a-41a0-a51c-ef2c35d4f191")
+	)
+	(pad "S" smd rect
+		(at -4 -3.5)
+		(size 3 1.5)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "6d83f041-8a0a-4ff3-a7b4-f9922709aa56")
+	)
+	(pad "T" smd rect
+		(at -4 3.5)
+		(size 3 1.5)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "8c8c4b80-4ef2-458a-b8ca-cc487f3d98ed")
+	)
+	(embedded_fonts no)
+	(model "${KIPRJMOD}/libs.3dshapes/AUDIO-PJ320B_L14.0-W6.4-H4.0.wrl"
+		(offset
+			(xyz 0 0 0.2)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -0 -0 -0)
+		)
+	)
+)

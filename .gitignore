@@ -20,4 +20,4 @@ bom/
 !releases/**
 
 # KiCad cache files
-fp-info-cache
+fp-info-cache*.rpt
