@@ -4538,7 +4538,7 @@
 	)
 	(text "1V RMS 0dBV Output\n1kOhm minimum Load\n-3dB <10Hz"
 		(exclude_from_sim no)
-		(at 382.27 157.48 0)
+		(at 379.984 122.682 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4586,7 +4586,7 @@
 	)
 	(text "RLoad>10k for optimal THD"
 		(exclude_from_sim no)
-		(at 377.19 160.02 0)
+		(at 374.904 125.222 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -13316,8 +13316,8 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C14663"
-			(at 0 0 0)
+		(property "Description" ""
+			(at 148.59 245.11 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13325,9 +13325,8 @@
 				(hide yes)
 			)
 		)
-
-		(property "Description" ""
-			(at 148.59 245.11 0)
+		(property "LCSC" "C14663"
+			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13959,8 +13958,8 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C57112"
-			(at 0 0 0)
+		(property "Description" ""
+			(at 96.52 241.3 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13968,9 +13967,8 @@
 				(hide yes)
 			)
 		)
-
-		(property "Description" ""
-			(at 96.52 241.3 0)
+		(property "LCSC" "C57112"
+			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14011,7 +14009,6 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "02949e14-ee17-4e04-88d6-2392d34cb3a5")
 		(property "Reference" "J2"
 			(at 394.97 174.6249 0)
@@ -14056,6 +14053,14 @@
 					(size 1.27 1.27)
 				)
 				(hide yes)
+			)
+		)
+		(property "Label" "OUTPUT_MONO"
+			(at 391.16 181.864 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
 		)
 		(pin "R"
@@ -14975,8 +14980,8 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C23162"
-			(at 0 0 0)
+		(property "Description" ""
+			(at 64.77 271.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14984,9 +14989,8 @@
 				(hide yes)
 			)
 		)
-
-		(property "Description" ""
-			(at 64.77 271.78 0)
+		(property "LCSC" "C23162"
+			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15027,7 +15031,6 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "197681de-b4d7-4967-93c8-87ff114647fe")
 		(property "Reference" "J5"
 			(at 27.94 166.2429 0)
@@ -15072,6 +15075,14 @@
 					(size 1.27 1.27)
 				)
 				(hide yes)
+			)
+		)
+		(property "Label" "INPUT_L"
+			(at 23.876 171.196 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
 		)
 		(pin "R"
@@ -15215,8 +15226,8 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C23162"
-			(at 0 0 0)
+		(property "Description" ""
+			(at 53.34 256.54 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15224,9 +15235,8 @@
 				(hide yes)
 			)
 		)
-
-		(property "Description" ""
-			(at 53.34 256.54 0)
+		(property "LCSC" "C23162"
+			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15611,8 +15621,8 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C25803"
-			(at 0 0 0)
+		(property "Description" ""
+			(at 378.46 180.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15620,9 +15630,8 @@
 				(hide yes)
 			)
 		)
-
-		(property "Description" ""
-			(at 378.46 180.34 0)
+		(property "LCSC" "C25803"
+			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15787,8 +15796,8 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C1603"
-			(at 0 0 0)
+		(property "Description" ""
+			(at 369.57 180.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15796,9 +15805,8 @@
 				(hide yes)
 			)
 		)
-
-		(property "Description" ""
-			(at 369.57 180.34 0)
+		(property "LCSC" "C1603"
+			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15892,7 +15900,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C1029"
+		(property "LCSC" "C85835"
 			(at 48.26 144.272 0)
 			(effects
 				(font
@@ -18108,8 +18116,8 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C23162"
-			(at 0 0 0)
+		(property "Description" ""
+			(at 172.72 22.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18117,9 +18125,8 @@
 				(hide yes)
 			)
 		)
-
-		(property "Description" ""
-			(at 172.72 22.86 0)
+		(property "LCSC" "C23162"
+			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18350,8 +18357,8 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C1646"
-			(at 0 0 0)
+		(property "Description" ""
+			(at 24.13 265.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18359,9 +18366,8 @@
 				(hide yes)
 			)
 		)
-
-		(property "Description" ""
-			(at 24.13 265.43 0)
+		(property "LCSC" "C1646"
+			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19208,8 +19214,8 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C14858"
-			(at 0 0 0)
+		(property "Description" ""
+			(at 30.48 260.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19217,9 +19223,8 @@
 				(hide yes)
 			)
 		)
-
-		(property "Description" ""
-			(at 30.48 260.35 0)
+		(property "LCSC" "C14858"
+			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20384,7 +20389,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C1029"
+		(property "LCSC" "C85835"
 			(at 40.64 59.69 0)
 			(effects
 				(font
@@ -20550,7 +20555,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C1029"
+		(property "LCSC" "C85835"
 			(at 48.26 168.148 0)
 			(effects
 				(font
@@ -21008,8 +21013,8 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C22966"
-			(at 0 0 0)
+		(property "Description" ""
+			(at 181.61 43.18 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21017,9 +21022,8 @@
 				(hide yes)
 			)
 		)
-
-		(property "Description" ""
-			(at 181.61 43.18 0)
+		(property "LCSC" "C22966"
+			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21387,8 +21391,8 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C25803"
-			(at 0 0 0)
+		(property "Description" ""
+			(at 378.46 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21396,9 +21400,8 @@
 				(hide yes)
 			)
 		)
-
-		(property "Description" ""
-			(at 378.46 146.05 0)
+		(property "LCSC" "C25803"
+			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21505,7 +21508,6 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "df196ee6-8ca3-41b7-8119-3810035d3ec2")
 		(property "Reference" "J4"
 			(at 394.97 137.7949 0)
@@ -21550,6 +21552,14 @@
 					(size 1.27 1.27)
 				)
 				(hide yes)
+			)
+		)
+		(property "Label" "OUTPUT_STEREO"
+			(at 392.176 145.288 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
 		)
 		(pin "R"
@@ -21807,7 +21817,6 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "e6536f0d-6733-4927-8ccd-eedf40c8c7aa")
 		(property "Reference" "J1"
 			(at 27.94 142.3669 0)
@@ -21852,6 +21861,14 @@
 					(size 1.27 1.27)
 				)
 				(hide yes)
+			)
+		)
+		(property "Label" "INPUT_R"
+			(at 23.876 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
 		)
 		(pin "R"
@@ -22222,8 +22239,8 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C21190"
-			(at 0 0 0)
+		(property "Description" ""
+			(at 39.37 248.92 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22231,9 +22248,8 @@
 				(hide yes)
 			)
 		)
-
-		(property "Description" ""
-			(at 39.37 248.92 0)
+		(property "LCSC" "C21190"
+			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27)
