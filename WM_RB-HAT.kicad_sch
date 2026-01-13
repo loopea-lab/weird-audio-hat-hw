@@ -12305,6 +12305,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C1779"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "5a377168-b9ee-409f-890a-ecea11cc3173")
 		)
@@ -12444,6 +12453,15 @@
 		)
 		(property "Elemon1" "CA3279775"
 			(at 195.58 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C49678"
+			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12968,6 +12986,15 @@
 		)
 		(property "Elemon1" "CA3279960"
 			(at 232.41 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C1671"
+			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14061,6 +14088,15 @@
 				(font
 					(size 1.27 1.27)
 				)
+			)
+		)
+		(property "LCSC" "C18594"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
 			)
 		)
 		(pin "R"
@@ -15158,6 +15194,15 @@
 		)
 		(property "Elemon1" ""
 			(at 48.006 138.938 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C18594"
+			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17310,6 +17355,15 @@
 		)
 		(property "Elemon1" ""
 			(at 74.422 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C1671"
+			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20478,6 +20532,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C96123"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "102a070e-d26d-494b-be8d-7ef7271b0c30")
 		)
@@ -20947,6 +21010,15 @@
 		)
 		(property "Elemon1" ""
 			(at 370.84 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C1671"
+			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21562,6 +21634,15 @@
 				)
 			)
 		)
+		(property "LCSC" "C18594"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "R"
 			(uuid "2858c6a9-9a02-42ae-968b-194fd5bb6dce")
 		)
@@ -21869,6 +21950,15 @@
 				(font
 					(size 1.27 1.27)
 				)
+			)
+		)
+		(property "LCSC" "C18594"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
 			)
 		)
 		(pin "R"
