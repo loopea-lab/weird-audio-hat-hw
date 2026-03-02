@@ -36,10 +36,10 @@ A sound card for Raspberry Pi with:
 
 | Layer | Purpose |
 |-------|---------|
-| F.Cu | SMD components + signal routing |
-| In1.Cu | GND plane |
-| In2.Cu | Power plane (+5V, +VREGIN) |
-| B.Cu | Signal routing |
+| F.Cu | SMD components + signal + power routing |
+| In1.Cu | GND plane (solid) |
+| In2.Cu | GND plane (solid) |
+| B.Cu | Signal + power routing |
 
 ## Main Components
 
