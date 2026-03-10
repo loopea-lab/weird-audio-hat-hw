@@ -11126,6 +11126,16 @@
 		)
 		(uuid "1bed7b87-0340-4a37-924d-dbc9f4be3bb0")
 	)
+	(label "HP_R_AC"
+		(at 45.466 198.12 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "1c1f4313-ce03-4cb6-99b4-de831afa88f1")
+	)
 	(label "I2C_SCL"
 		(at 246.38 175.26 180)
 		(effects
@@ -11155,6 +11165,16 @@
 			(justify left bottom)
 		)
 		(uuid "2511dadc-deb0-4e31-951a-57b8fbe8c741")
+	)
+	(label "HP_L_AC"
+		(at 45.466 203.2 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "26301024-4a57-431a-959c-6d97d5b2675a")
 	)
 	(label "I2C_SCL"
 		(at 170.18 40.64 0)
@@ -11285,6 +11305,16 @@
 			(justify left bottom)
 		)
 		(uuid "6089d1ea-9f80-4a01-8b55-cae1a583aa20")
+	)
+	(label "LINE_INPUT_R"
+		(at 40.894 177.8 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6ffa9270-baf8-4336-89a5-96e82e7964c7")
 	)
 	(label "P3V3_HAT"
 		(at 172.72 19.05 0)
@@ -11426,26 +11456,6 @@
 		)
 		(uuid "af4f77fb-0338-4400-9c76-7eef7fbc0a50")
 	)
-	(label "INPUT_R"
-		(at 53.594 177.8 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "bee63901-5a24-405f-b500-b4906ef61f84")
-	)
-	(label "INPUT_L"
-		(at 53.594 182.88 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "c8c09d03-c3b9-429f-8d0c-d735abfbb3df")
-	)
 	(label "P3V3_HAT"
 		(at 170.18 35.56 0)
 		(effects
@@ -11465,6 +11475,16 @@
 			(justify right bottom)
 		)
 		(uuid "d066d1d8-c119-44f5-9ec7-6d14b6a5f254")
+	)
+	(label "LINE_INPUT_L"
+		(at 40.894 182.88 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d63fbfad-94f5-4737-a496-be162ec68af3")
 	)
 	(label "I2C_SDA"
 		(at 246.38 172.72 180)
@@ -11496,16 +11516,6 @@
 		)
 		(uuid "df308e7c-2b31-4429-9001-251de3228e8f")
 	)
-	(label "OUTPUT_L"
-		(at 53.594 203.2 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "dfd38a02-3baa-40ec-b872-135c40a3a251")
-	)
 	(label "I2S_ADC"
 		(at 181.61 210.82 0)
 		(effects
@@ -11535,16 +11545,6 @@
 			(justify right bottom)
 		)
 		(uuid "ee387a66-dc7d-4c58-8efa-9b5e9521e33e")
-	)
-	(label "OUTPUT_R"
-		(at 53.594 198.12 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "ef383046-f099-4356-9887-2fe54f05b1b7")
 	)
 	(label "GND"
 		(at 243.84 76.2 180)

@@ -20,4 +20,14 @@ bom/
 !releases/**
 
 # KiCad cache files
+fp-info-cache
 fp-info-cache*.rpt
+
+# KiCad lock files
+~*.lck
+
+# Generated production outputs
+production/
+
+# Thumbnails
+*_thumbnail.svg
