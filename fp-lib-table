@@ -2,4 +2,5 @@
   (lib (name project_footprints)(type KiCad)(uri "${KIPRJMOD}/project_footprints.pretty")(options "")(descr ""))
   (lib (name ArduinoModules)(type KiCad)(uri "${KIPRJMOD}/libs/hardware/ArduinoModules.pretty")(options "")(descr ""))
   (lib (name libs)(type KiCad)(uri "${KIPRJMOD}/libs.pretty")(options "")(descr "JLCPCB SMD components"))
+  (lib (name SSSS213202)(type KiCad)(uri "${KIPRJMOD}/libs/SSSS213202.pretty")(options "")(descr "Alps SPDT slide switch"))
 )

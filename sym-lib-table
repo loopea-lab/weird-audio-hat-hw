@@ -6,4 +6,5 @@
   (lib (name "WM_RB-HAT-rescue")(type "KiCad")(uri "${KIPRJMOD}/WM_RB-HAT-rescue.kicad_sym")(options "")(descr ""))
   (lib (name "0Arduino_Modules")(type "KiCad")(uri "${KIPRJMOD}/libs/hardware/6Arduino_Modules.kicad_sym")(options "")(descr ""))
   (lib (name "0PowerCustom")(type "KiCad")(uri "${KIPRJMOD}/libs/hardware/6PowerCustom.kicad_sym")(options "")(descr ""))
+  (lib (name "SSSS213202")(type "KiCad")(uri "${KIPRJMOD}/libs/SSSS213202.kicad_sym")(options "")(descr "Alps SPDT slide switch"))
 )
