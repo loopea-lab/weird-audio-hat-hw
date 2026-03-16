@@ -17325,7 +17325,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1uF X7R"
+		(property "Value" "4.7uF X7R"
 			(at 228.6 128.2762 0)
 			(effects
 				(font
@@ -17361,7 +17361,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C28323"
+		(property "LCSC" "C87998"
 			(at 226.06 127 0)
 			(effects
 				(font
