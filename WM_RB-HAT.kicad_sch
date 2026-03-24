@@ -5,9 +5,9 @@
 	(uuid "abb2e430-7ef1-40b1-9e2a-0490c06daacc")
 	(paper "A3")
 	(title_block
-		(title "Raspberry Audio Hat ")
+		(title "Weird Audio HAT")
 		(date "2024-04-19")
-		(rev "A")
+		(rev "R0.2")
 	)
 	(lib_symbols
 		(symbol "0Arduino_Modules:BC817"
