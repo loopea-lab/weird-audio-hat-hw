@@ -22,6 +22,7 @@ bom/
 # KiCad cache files
 fp-info-cache
 fp-info-cache*.rpt
+*.rpt
 
 # KiCad lock files
 ~*.lck
