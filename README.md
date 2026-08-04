@@ -45,6 +45,13 @@ drive the whole thing.
 
 Codec on I2C `0x1A`.
 
+## Documentation
+
+Full manual for the Weird system — assembly, specifications, software and
+troubleshooting: **https://github.com/loopea-lab/weird**
+
+This board's page: [Audio Hat](https://github.com/loopea-lab/weird/blob/main/modules/audio-hat.md).
+
 ## Revisions
 
 Branches: `main` = R0.1 (legacy) · `dev` = **R0.2** (current).
