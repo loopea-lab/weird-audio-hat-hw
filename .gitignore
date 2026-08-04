@@ -32,3 +32,6 @@ production/
 
 # Thumbnails
 *_thumbnail.svg
+
+# datasheets ship with the repo
+!datasheets/*.pdf
