@@ -1,119 +1,56 @@
 # Weird Audio HAT
 
-Stereo audio HAT for Raspberry Pi based on the WM8960 codec. Part of the Weird modular system.
+Hi-fi stereo audio for your Raspberry Pi — a WM8960 sound card with stereo line in/out, headphone, and
+mic. Part of the **Weird** system (pair it with the
+[Weird MCP Inputs](https://github.com/loopea-lab/weird-mcp-inputs) for CV + MIDI).
 
-## What is this
+## What it does
 
-A sound card for Raspberry Pi with:
-- WM8960 stereo codec (24-bit, 48kHz)
-- I2S digital audio + I2C control
-- 4x 3.5mm TRS jacks (stereo line in, stereo line out, headphone out, mic in)
-- 2x20 pin RPi HAT connector
-- 24MHz crystal oscillator
+- **Stereo line in & out**, **headphone** amp, **mic in** (with MICBIAS)
+- Shows up as a normal **ALSA sound card** — record and play like any USB interface
+- Hi-fi: flat response (±0.5 dB, 100 Hz–8 kHz), output THD **0.003%**, crosstalk **-67 to -92 dB**
 
-## Physical Stack
+![Crosstalk](assets/crosstalk.png)
 
-```
-┌─────────────────────────┐
-│      Control Panel       │  ← ControlPanelBoard (weird-mcp-inputs)
-├─────────────────────────┤
-│      MCP Inputs HAT      │  ← McpInputBoard (weird-mcp-inputs)
-├─────────────────────────┤
-│      Audio HAT           │  ← This board
-├─────────────────────────┤
-│      Raspberry Pi        │  ← Pi Zero 2W
-└─────────────────────────┘
-```
+*Crosstalk between inputs: -67 to -92 dB (pro level).*
 
-## Branches
+## What you can do with it
 
-| Branch | Version | Description |
-|--------|---------|-------------|
-| `main` | v1.0 | Stable, THT components, 2-layer PCB |
-| `dev` | v1.1 | SMD migration, 4-layer PCB for JLCPCB assembly |
+Record a synth, guitar or mixer straight into your Pi; play audio back out to your rack or monitors;
+build a Pi-based effects box, looper or sampler. Pair it with the MCP Inputs HAT and your modular can
+drive the whole thing.
 
-## Layer Stack (dev)
+## Quick start
 
-| Layer | Purpose |
-|-------|---------|
-| F.Cu | SMD components + signal + power routing |
-| In1.Cu | GND plane (solid) |
-| In2.Cu | GND plane (solid) |
-| B.Cu | Signal + power routing |
+1. Seat the HAT on the Pi and install the driver (see [weird-audio-hat-driver](https://github.com/loopea-lab/weird-audio-hat-driver)).
+2. Confirm it's detected:
+   ```bash
+   aplay -l        # → card: wm8960soundcard
+   ```
+3. Record and play back (capture must be **S32_LE**):
+   ```bash
+   arecord -D hw:wm8960soundcard -f S32_LE -r 44100 -c 2 take.wav
+   aplay   -D hw:wm8960soundcard take.wav
+   ```
 
-## Main Components
+> **Use a Pi Zero 2W or Pi 1–4 — not a Pi 5.** The codec clock comes from the Pi's GPCLK0, which the Pi 5 doesn't have.
 
-| Ref | Part | Package | Description | LCSC |
-|-----|------|---------|-------------|------|
-| U1 | WM8960 | QFN-32 | Stereo codec, I2S + I2C | C18752 |
-| U4 | MCP1711T-33 | SOT-23-5 | 3.3V LDO regulator | C79527 |
-| U3 | 74AHC1G14 | SOT-353 | Schmitt trigger inverter | — |
-| Q1, Q2 | BC817 | SOT-23 | NPN transistor | C2137 |
-| D1 | 1N4148W | SOD-123 | Signal diode | — |
-| J1, J2, J4, J5 | AudioJack3 | 3.5mm TRS | Audio connectors | C18594 |
-| J3 | 2x20 Header | 2.54mm | RPi HAT connector | — |
-| FB1-FB3 | Ferrite Bead | 0805 | 220Ω-1kΩ @ 100MHz | C85835 |
-| Y1 | 24MHz | XO32 | Crystal oscillator | — |
-| CP1-CP4 | 220µF 16V | — | Bulk decoupling | — |
+## Connections
 
-## Interfaces
+| Jack | |
+|------|--|
+| **J5 / J1** | line in L / R — J1 also carries MICBIAS for an electret mic |
+| **J4** | stereo line out |
+| **J2** | mono out |
 
-**I2S (digital audio):**
-- BCLK — Bit clock
-- LRCLK — Left/Right word clock
-- DACDAT — DAC data (Pi → codec)
-- ADCDAT — ADC data (codec → Pi)
+Codec on I2C `0x1A`.
 
-**I2C (control):**
-- SCL — Clock
-- SDA — Data
-- Address: 0x1A
+## Revisions
 
-## Power
+Branches: `main` = R0.1 (legacy) · `dev` = **R0.2** (current).
 
-| Rail | Source | Purpose |
-|------|--------|---------|
-| +5V | RPi GPIO header | Main supply |
-| +3.3V | MCP1711T-33 LDO | Digital logic |
-| +3.3VA | Filtered from +3.3V | Analog supply (codec) |
+Two things to know if you have an **R0.2 board from the first run**:
 
-Total current draw: ~70mA max.
-
-## Audio Specs
-
-- Line output: 1V RMS (0 dBV), load ≥ 1kΩ (≥ 10kΩ recommended)
-- Headphone output: 32Ω load
-- Output coupling: -3dB < 10Hz
-- Mic bias: selectable via jumper JP1
-
-## Datasheets
-
-- [WM8960](https://datasheet.lcsc.com/lcsc/2304140030_Cirrus-Logic-WM8960CGEFL-RV_C18752.pdf) — Stereo codec (Cirrus Logic)
-- [MCP1711](https://ww1.microchip.com/downloads/aemDocuments/documents/OTH/ProductDocuments/DataSheets/20005415D.pdf) — LDO 3.3V regulator (Microchip)
-- [SN74AHC1G14](https://www.ti.com/lit/ds/symlink/sn74ahc1g14.pdf) — Single Schmitt-trigger inverter (TI)
-- [BC817](https://assets.nexperia.com/documents/data-sheet/BC817_SER.pdf) — NPN transistor (Nexperia)
-- [1N4148W](https://www.diodes.com/assets/Datasheets/BAV16W_1N4148W.pdf) — Fast switching diode (Diodes Inc)
-
-## Current Status
-
-Schematic design is advanced. PCB placement and routing are pending for the v1.1 SMD/4-layer revision.
-
-## Known Issues (v1.0)
-
-- Crosstalk at -60dB between input jacks J1 and J7 (fix: replace jacks or increase spacing)
-- Ring/tip bridging with mono cables (fix: cut ring pin on input jacks)
-
-## Project Structure
-
-```
-weird-audio-hat-hw/
-├── WM_RB-HAT.kicad_sch      # Main schematic
-├── WM_RB-HAT.kicad_pcb      # PCB layout
-├── WM_RB-HAT.kicad_pro      # KiCad project file
-├── datasheets/               # Component datasheets
-├── libs/                     # Custom symbol libraries
-├── libs.pretty/              # Custom footprint libraries
-├── libs.3dshapes/            # 3D models
-├── production/               # Manufacturing outputs
-└── releases/v1.0/            # v1.0 release artifacts
-```
+- **Output resistors R6/R22/R23 are populated at 0 Ω** and mute the three outputs. Remove them.
+  The schematic ships corrected at 100 kΩ, so later runs don't need this.
+- **Mono out (J2)** needs its DAPM block enabled in the driver.
