@@ -14,6 +14,8 @@ board2pdf.config.ini
 *.pdf
 plots/
 bom/
+# ...menos el BOM interactivo, que es la ayuda de armado y se publica a proposito.
+!bom/ibom.html
 
 # But allow everything in releases/ folder
 !releases/
