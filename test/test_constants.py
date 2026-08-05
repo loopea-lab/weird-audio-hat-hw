@@ -1,6 +1,6 @@
 """Invariantes de las constantes de esta placa. Corre en la laptop: `pytest test/`.
 
-constants.yaml es la unica fuente autorada. test/constants.py se genera desde el YAML y
+constants.yaml es la unica fuente autorada. El modulo de constantes se genera desde el YAML y
 los scripts lo importan en vez de repetir valores. Estos tests verifican esa cadena.
 
 Este archivo es identico en los tres repos de placa a proposito: cada repo tiene que
@@ -19,7 +19,6 @@ import pytest
 TEST = Path(__file__).resolve().parent
 REPO = TEST.parent
 YAML = REPO / "constants.yaml"
-GENERADO = TEST / "constants.py"
 
 FUENTES_VALIDAS = {"netlist", "cobre", "bom", "datasheet", "design_target", "derived"}
 
@@ -27,6 +26,14 @@ FUENTES_VALIDAS = {"netlist", "cobre", "bom", "datasheet", "design_target", "der
 def cargar():
     yaml = pytest.importorskip("yaml", reason="hace falta PyYAML para leer constants.yaml")
     return yaml.safe_load(YAML.read_text())
+
+
+def nombre_modulo():
+    """El modulo generado se llama por placa: copiar el de otra placa tiene que fallar
+    al importar, no dar valores de otra cosa en silencio."""
+    n = cargar().get("_module_name")
+    assert n, "constants.yaml no declara _module_name"
+    return n
 
 
 def entradas():
@@ -50,7 +57,17 @@ def test_lo_generado_esta_en_sync_con_el_yaml():
 
 
 def test_lo_generado_avisa_que_no_se_edita_a_mano():
-    assert "NO EDITAR A MANO" in GENERADO.read_text().splitlines()[0]
+    generado = TEST / (nombre_modulo() + ".py")
+    assert generado.exists(), f"falta {generado.name}"
+    assert "NO EDITAR A MANO" in generado.read_text().splitlines()[0]
+
+
+def test_el_modulo_generado_lleva_el_nombre_de_la_placa():
+    """Un modulo llamado a secas es un nombre que cualquier placa puede tener. Copiar el
+    equivocado a la Pi daba valores de otra placa sin que nada avisara."""
+    n = nombre_modulo()
+    assert n != "constants", "el modulo no puede llamarse 'constants' a secas"
+    assert (TEST / (n + ".py")).exists()
 
 
 def test_toda_constante_dice_de_donde_sale():
@@ -72,16 +89,17 @@ def test_ninguna_constante_es_una_medicion():
 
 
 def test_todo_lo_generado_es_importable():
+    import importlib
     sys.path.insert(0, str(TEST))
     try:
-        import constants  # noqa: F401
+        importlib.import_module(nombre_modulo())
     finally:
         sys.path.pop(0)
 
 
 def scripts():
     return [p for p in sorted(TEST.glob("*.py"))
-            if p.name not in {"constants.py", "gen_constants.py"}
+            if p.name not in {nombre_modulo() + ".py", "gen_constants.py"}
             and not p.name.startswith("test_")]
 
 

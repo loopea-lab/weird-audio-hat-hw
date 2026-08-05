@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Genera constants.py a partir de constants.yaml. Corre en la LAPTOP.
+"""Genera el modulo de constantes a partir de constants.yaml. Corre en la LAPTOP.
 
-El YAML es la unica fuente autorada. constants.py se genera porque la Pi no trae
+El YAML es la unica fuente autorada. El modulo se genera porque la Pi no trae
 PyYAML y los scripts de bring-up tienen que correr en una SD recien flasheada.
 
-  python3 gen_constants.py --write    regenera constants.py
-  python3 gen_constants.py --check    falla si constants.py quedo desactualizado
+  python3 gen_constants.py --write    regenera el modulo
+  python3 gen_constants.py --check    falla si el modulo quedo desactualizado
 
 Este archivo es identico en los tres repos de placa a proposito: un test cruzado
 verifica que no divergieron.
@@ -19,7 +19,15 @@ import textwrap
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 YAML = os.path.join(os.path.dirname(HERE), "constants.yaml")
-OUT = os.path.join(HERE, "constants.py")
+def _salida():
+    """El modulo se llama por placa a proposito: copiar el de otra placa a la Pi tiene
+    que fallar al importar, no dar valores de otra cosa en silencio."""
+    import yaml
+    with open(YAML) as f:
+        nombre = yaml.safe_load(f).get("_module_name")
+    if not nombre:
+        sys.exit("constants.yaml no declara _module_name")
+    return os.path.join(HERE, nombre + ".py")
 
 BANNER = "# GENERADO por test/gen_constants.py desde constants.yaml -- NO EDITAR A MANO."
 
@@ -82,30 +90,31 @@ def render(doc):
 
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("--write", action="store_true", help="regenera constants.py")
+    p.add_argument("--write", action="store_true", help="regenera el modulo de constantes")
     p.add_argument("--check", action="store_true", help="falla si esta desactualizado")
     a = p.parse_args()
     if not (a.write or a.check):
         p.error("elegir --write o --check")
 
+    out = _salida()
     want = render(load())
-    have = open(OUT).read() if os.path.exists(OUT) else None
+    have = open(out).read() if os.path.exists(out) else None
 
     if a.check:
         if have != want:
-            print("constants.py esta desactualizado respecto de constants.yaml.",
+            print(os.path.basename(out) + " esta desactualizado respecto de constants.yaml.",
                   file=sys.stderr)
             print("Regenerar con: python3 test/gen_constants.py --write", file=sys.stderr)
             return 1
-        print("constants.py en sync con constants.yaml")
+        print(os.path.basename(out) + " en sync con constants.yaml")
         return 0
 
     if have == want:
-        print("constants.py ya estaba en sync")
+        print(os.path.basename(out) + " ya estaba en sync")
         return 0
-    with open(OUT, "w") as f:
+    with open(out, "w") as f:
         f.write(want)
-    print("constants.py regenerado (%d lineas)" % want.count("\n"))
+    print("%s regenerado (%d lineas)" % (os.path.basename(out), want.count("\n")))
     return 0
 
 

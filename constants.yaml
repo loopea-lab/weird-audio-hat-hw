@@ -19,6 +19,7 @@
 # Las cifras MEDIDAS estan deliberadamente ausentes: THD, crosstalk y respuesta en
 # frecuencia son por-tanda y su autoridad es bringup_results.md.
 
+_module_name: audio_hat_constants
 _module_doc: >-
   Constantes del Audio HAT (WM8960). Generado desde constants.yaml, no editar a mano.
 

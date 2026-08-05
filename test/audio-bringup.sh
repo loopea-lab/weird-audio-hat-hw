@@ -12,8 +12,8 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 
 # Las constantes salen de constants.yaml via el modulo generado: este script no las repite.
 k() {
-  python3 -c "import sys; sys.path.insert(0, '$HERE'); import constants as c; print(eval(sys.argv[1], vars(c)))" "$1" \
-    || { echo "no se pudo leer '$1' de constants.py (¿esta al lado de este script?)" >&2; exit 1; }
+  python3 -c "import sys; sys.path.insert(0, '$HERE'); import audio_hat_constants as c; print(eval(sys.argv[1], vars(c)))" "$1" \
+    || { echo "no se pudo leer '$1' de audio_hat_constants.py (¿esta al lado de este script?)" >&2; exit 1; }
 }
 FMT=$(k SAMPLE_FORMAT)
 RATE=$(k SAMPLE_RATE_HZ)
