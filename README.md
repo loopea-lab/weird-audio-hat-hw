@@ -4,6 +4,8 @@ Hi-fi stereo audio for your Raspberry Pi — a WM8960 sound card with stereo lin
 mic. Part of the **Weird** system (pair it with the
 [Weird MCP Inputs](https://github.com/loopea-lab/weird-mcp-inputs) for CV + MIDI).
 
+![Weird Audio HAT](WM_RB-HAT.png)
+
 ## What it does
 
 - **Stereo line in & out**, **headphone** amp, **mic in** (with MICBIAS)
