@@ -7,7 +7,7 @@
 	(title_block
 		(title "Weird Audio HAT")
 		(date "2024-04-19")
-		(rev "R0.2")
+		(rev "R1.1")
 	)
 	(lib_symbols
 		(symbol "0Arduino_Modules:BC817"
