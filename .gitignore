@@ -13,7 +13,9 @@ board2pdf.config.ini
 # Generated outputs
 *.pdf
 plots/
-bom/
+# Se excluye el CONTENIDO, no la carpeta: git no desciende a un directorio excluido,
+# asi que `bom/` haria imposible la excepcion de abajo.
+bom/*
 # ...menos el BOM interactivo, que es la ayuda de armado y se publica a proposito.
 !bom/ibom.html
 
