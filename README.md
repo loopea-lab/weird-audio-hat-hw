@@ -37,6 +37,12 @@ drive the whole thing.
 
 > **Use a Pi Zero 2W or Pi 1–4 — not a Pi 5.** The codec clock comes from the Pi's GPCLK0, which the Pi 5 doesn't have.
 
+## Connectors
+
+Every pin of every connector, with the net it carries, read from the
+copper: [`CONNECTORS.md`](CONNECTORS.md). Generated from the PCB — if it disagrees with
+the board, the board wins and the file is stale.
+
 ## Connections
 
 | Jack | |

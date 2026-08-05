@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-"""Genera el modulo de constantes a partir de constants.yaml. Corre en la LAPTOP.
+"""Genera los archivos derivados de esta placa. Corre en la LAPTOP.
+
+Dos salidas, las dos generadas y ninguna editable a mano:
+
+  el modulo de constantes de la placa, en test/   desde constants.yaml
+  CONNECTORS.md                                  desde el .kicad_pcb -- que net tiene cada pin de cada
+                              conector, leido del COBRE. No existia en ningun lado y su
+                              ausencia costo una tarde entera de diagnostico (O-28).
 
 El YAML es la unica fuente autorada. El modulo se genera porque la Pi no trae
 PyYAML y los scripts de bring-up tienen que correr en una SD recien flasheada.
@@ -12,7 +19,9 @@ verifica que no divergieron.
 """
 
 import argparse
+import glob
 import os
+import re
 import pprint
 import sys
 import textwrap
@@ -88,6 +97,63 @@ def render(doc):
     return "\n".join(lines).rstrip() + "\n"
 
 
+PCB_BANNER = ("<!-- GENERADO por test/gen_constants.py desde los .kicad_pcb. "
+              "NO EDITAR A MANO. -->")
+
+# KiCad escribe el net de un pad de dos formas segun la version: (net 12 "GND") y
+# (net "GND"). Un patron que exija el numero devuelve vacio en el otro caso, en silencio.
+_PAD = re.compile(r'\(pad "([^"]+)"(?:(?!\(pad ).)*?\(net (?:\d+ )?"([^"]*)"\)', re.S)
+
+
+def _footprints(texto):
+    inicios = [m.start() for m in re.finditer(r'\n\t\(footprint ', texto)] + [len(texto)]
+    for i in range(len(inicios) - 1):
+        yield texto[inicios[i]:inicios[i + 1]]
+
+
+def conectores(pcb):
+    """[(referencia, valor, {pin: net})] de los conectores de un .kicad_pcb."""
+    texto = open(pcb, errors="replace").read()
+    out = []
+    for b in _footprints(texto):
+        r = re.search(r'\(property "Reference" "(J[^"]*)"', b)
+        if not r:
+            continue
+        pads = dict(_PAD.findall(b))
+        if len(pads) < 2:
+            continue
+        v = re.search(r'\(property "Value" "([^"]*)"', b)
+        out.append((r.group(1), v.group(1) if v else "", pads))
+    return sorted(out, key=lambda x: (len(x[2]), x[0]))
+
+
+def render_conectores(raiz):
+    pcbs = sorted(p for p in glob.glob(os.path.join(raiz, "**", "*.kicad_pcb"), recursive=True)
+                  if ".backups" not in p)
+    lineas = [PCB_BANNER, "",
+              "# Conectores — qué net tiene cada pin",
+              "",
+              "Leído del **cobre**, que es lo que responde \"¿qué hay en la placa que tengo",
+              "en la mano?\". Para saber qué *hace* cada conector, ver el manual.",
+              ""]
+    total = 0
+    for pcb in pcbs:
+        cs = conectores(pcb)
+        if not cs:
+            continue
+        lineas += ["## `%s`" % os.path.basename(pcb), ""]
+        for ref, val, pads in cs:
+            lineas.append("### %s%s" % (ref, " — %s" % val if val else ""))
+            lineas += ["", "| Pin | Net |", "|---|---|"]
+            for pin in sorted(pads, key=lambda x: (len(x), x)):
+                lineas.append("| %s | `%s` |" % (pin, pads[pin]))
+            lineas.append("")
+            total += 1
+    if not total:
+        raise SystemExit("no encontre ningun conector con nets en %s" % raiz)
+    return "\n".join(lineas).rstrip() + "\n"
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--write", action="store_true", help="regenera el modulo de constantes")
@@ -96,11 +162,19 @@ def main():
     if not (a.write or a.check):
         p.error("elegir --write o --check")
 
+    raiz = os.path.dirname(HERE)
     out = _salida()
+    conn_out = os.path.join(raiz, "CONNECTORS.md")
     want = render(load())
+    want_conn = render_conectores(raiz)
     have = open(out).read() if os.path.exists(out) else None
+    have_conn = open(conn_out).read() if os.path.exists(conn_out) else None
 
     if a.check:
+        if have_conn != want_conn:
+            print("CONNECTORS.md esta desactualizado respecto del .kicad_pcb.", file=sys.stderr)
+            print("Regenerar con: python3 test/gen_constants.py --write", file=sys.stderr)
+            return 1
         if have != want:
             print(os.path.basename(out) + " esta desactualizado respecto de constants.yaml.",
                   file=sys.stderr)
@@ -109,6 +183,10 @@ def main():
         print(os.path.basename(out) + " en sync con constants.yaml")
         return 0
 
+    if have_conn != want_conn:
+        with open(conn_out, "w") as f:
+            f.write(want_conn)
+        print("CONNECTORS.md regenerado (%d lineas)" % want_conn.count("\n"))
     if have == want:
         print(os.path.basename(out) + " ya estaba en sync")
         return 0
