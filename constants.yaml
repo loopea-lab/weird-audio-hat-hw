@@ -23,6 +23,18 @@ _module_name: audio_hat_constants
 _module_doc: >-
   Constantes del Audio HAT (WM8960). Generado desde constants.yaml, no editar a mano.
 
+placa:
+  BOARD_NAME:
+    value: Audio HAT (WM8960)
+    source: design_target
+    note: como la nombra la tabla de revisiones de la doc
+  BOARD_REV:
+    value: R1.1
+    source: cobre
+    note: >-
+      Lo que dice la serigrafia de F.SilkS: 'WEIRD AUDIO HAT R1.1'. Es la autoridad: cuando la pregunta es
+      "que placa tengo en la mano", lo unico que responde es lo impreso.
+
 codec:
   I2C_ADDR:
     value: 0x1a

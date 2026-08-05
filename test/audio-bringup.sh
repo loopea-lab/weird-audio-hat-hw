@@ -20,6 +20,8 @@ RATE=$(k SAMPLE_RATE_HZ)
 NCH=$(k CHANNELS)
 I2C_ADDR=$(k "format(I2C_ADDR, 'x')")
 CARD_NAME=$(k ALSA_CARD_NAME)
+BOARD=$(k BOARD_NAME)
+REV=$(k BOARD_REV)
 
 LOOP_SECONDS=5
 while getopts "t:h" opt; do
@@ -34,7 +36,8 @@ pass() { echo "  [OK]   $1"; }
 fail() { echo "  [FALLA] $1"; FAILED=1; }
 FAILED=0
 
-echo "=== Audio HAT (WM8960) bring-up ==="
+echo "=== $BOARD $REV — bring-up ==="
+echo "    revision segun la serigrafia de la placa; si la tuya dice otra cosa, este script no es para ella"
 
 # 1. I2C: el codec debe aparecer en 0x1A
 echo "--- I2C (codec @ 0x$I2C_ADDR) ---"

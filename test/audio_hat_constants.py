@@ -3,6 +3,13 @@
 #   python3 test/gen_constants.py --write
 """Constantes del Audio HAT (WM8960). Generado desde constants.yaml, no editar a mano."""
 
+# --- placa ---
+# (design_target) como la nombra la tabla de revisiones de la doc
+BOARD_NAME = 'Audio HAT (WM8960)'
+# (cobre) Lo que dice la serigrafia de F.SilkS: 'WEIRD AUDIO HAT R1.1'. Es la autoridad: cuando
+# la pregunta es "que placa tengo en la mano", lo unico que responde es lo impreso.
+BOARD_REV = 'R1.1'
+
 # --- codec ---
 I2C_ADDR = 0x1a  # (netlist) WM8960 en i2c-1
 # (design_target) nombre con el que enumera el driver; `aplay -l` lo tiene que mostrar

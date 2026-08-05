@@ -23,7 +23,7 @@ import sys
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from audio_hat_constants import CHANNELS, SAMPLE_FORMAT, SAMPLE_RATE_HZ  # noqa: E402
+from audio_hat_constants import BOARD_NAME, BOARD_REV, CHANNELS, SAMPLE_FORMAT, SAMPLE_RATE_HZ  # noqa: E402
 
 AMPLITUD = 0.30          # lejos del clip, para que el resultado no sea recorte
 DUR_TONO = 3.0
@@ -103,12 +103,19 @@ def veredicto(canal, izq, der):
     return v, ps
 
 
+def _cabecera():
+    """Toda salida de test dice contra que hardware corrio. La revision sale de
+    constants.yaml, que la toma de la serigrafia: no se escribe a mano en ningun lado."""
+    print("=== %s %s ===" % (BOARD_NAME, BOARD_REV))
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("-f", "--freq", type=float, default=1000.0)
     p.add_argument("-D", "--device", default="hw:1,0")
     a = p.parse_args()
 
+    _cabecera()
     print("tono de %g Hz a %.0f%% de fondo de escala, %s @ %d Hz"
           % (a.freq, AMPLITUD * 100, SAMPLE_FORMAT, SAMPLE_RATE_HZ))
     print()
