@@ -1,0 +1,84 @@
+# Constantes de la placa -- la unica fuente autorada.
+#
+# Estos son los numeros que DESCRIBEN LA PLACA. Se generan a test/constants.py con
+#   python3 test/gen_constants.py --write
+# El archivo generado no se edita a mano; `--check` falla si quedo desactualizado y un
+# test lo verifica. Se genera en vez de leer el YAML en runtime porque la Pi no trae
+# PyYAML y los scripts de bring-up tienen que correr en una SD recien flasheada.
+#
+# `source` dice de donde sale la autoridad del numero, con los mismos marcadores que usa
+# la documentacion:
+#
+#   netlist        del esquematico, via KiCad MCP generate_netlist
+#   cobre          del netlist IPC de produccion / gerbers
+#   bom            un componente de la placa; el valor coincide con su designador
+#   datasheet      de la hoja de datos que esta en datasheets/
+#   design_target  una eleccion, no una medicion
+#   derived        calculado a partir de otras entradas de este archivo
+#
+# Las cifras MEDIDAS estan deliberadamente ausentes: THD, crosstalk y respuesta en
+# frecuencia son por-tanda y su autoridad es bringup_results.md.
+
+_module_doc: >-
+  Constantes del Audio HAT (WM8960). Generado desde constants.yaml, no editar a mano.
+
+codec:
+  I2C_ADDR:
+    value: 0x1a
+    format: hex
+    source: netlist
+    note: WM8960 en i2c-1
+  ALSA_CARD_NAME:
+    value: wm8960soundcard
+    source: design_target
+    note: nombre con el que enumera el driver; `aplay -l` lo tiene que mostrar
+
+reloj:
+  MCLK_HZ:
+    value: 11289600
+    unit: Hz
+    source: design_target
+    note: >-
+      SYSCLK directo de la familia 44.1 k, sin PLL. Lo genera minimal_clk desde
+      userspace sobre GPCLK0. La placa NO tiene oscilador: se removio del layout.
+  MCLK_GPIO_BCM:
+    value: 4
+    source: netlist
+    note: J3 pin 7 = BCM4 = GPCLK0 -> R26 -> U1 pin 11 (MCLK)
+  PI_MODELOS_SOPORTADOS:
+    value: [Pi 1, Pi 2, Pi 3, Pi 4, Zero 2 W]
+    source: design_target
+    note: >-
+      La Pi 5 NO sirve: minimal_clk pokea registros legacy del BCM283x que no existen
+      detras del RP1, y sin oscilador onboard no hay MCLK.
+
+captura:
+  SAMPLE_FORMAT:
+    value: S32_LE
+    source: design_target
+    note: >-
+      El formato correcto para arecord/aplay. Con S16_LE la captura parece rota y no lo
+      esta: fue un diagnostico falso que costo tiempo. No usar `-f cd`.
+  SAMPLE_RATE_HZ:
+    value: 44100
+    unit: Hz
+    source: derived
+    note: >-
+      Familia 44.1 k, que es la que permite MCLK_HZ. 48 kHz no esta disponible sin
+      cambiar el reloj a 12.288 MHz y el device tree.
+  CHANNELS:
+    value: 2
+    source: netlist
+
+jacks:
+  JACKS:
+    value:
+      J5: {dir: in, canal: L, pin: LINPUT3}
+      J1: {dir: in, canal: R, pin: RINPUT3}
+      J4: {dir: out, canal: LR, pin: HP_L/HP_R}
+      J2: {dir: out, canal: mono, pin: OUT3}
+    source: netlist
+    note: >-
+      Las entradas son single-ended: LINPUT1/2 y RINPUT1/2 quedaron sin conectar, asi
+      que el modo diferencial es imposible en este hardware. J1 es el unico con MICBIAS,
+      conmutado por SW1.

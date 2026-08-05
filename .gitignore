@@ -35,3 +35,6 @@ production/
 
 # datasheets ship with the repo
 !datasheets/*.pdf
+__pycache__/
+*.pyc
+.pytest_cache/
