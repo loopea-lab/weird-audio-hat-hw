@@ -23,6 +23,7 @@ import glob
 import os
 import re
 import pprint
+import subprocess
 import sys
 import textwrap
 
@@ -127,9 +128,24 @@ def conectores(pcb):
     return sorted(out, key=lambda x: (len(x[2]), x[0]))
 
 
+def pcbs_versionados(raiz):
+    """Los `.kicad_pcb` que git trackea, que son los que forman parte del diseño.
+
+    Leer del disco traga lo que KiCad deja al lado: `.backups/`, `_autosave-*`, y lo que
+    invente la próxima version. Una lista negra a mano nunca está completa — el autosave
+    agregó 356 líneas y una placa inexistente a CONNECTORS.md. Con git, `.gitignore` es la
+    única fuente de verdad y la clase entera desaparece.
+    """
+    r = subprocess.run(["git", "-C", raiz, "ls-files", "-z", "*.kicad_pcb"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, f"git ls-files falló en {raiz}: {r.stderr.strip()}"
+    pcbs = sorted(os.path.join(raiz, p) for p in r.stdout.split("\0") if p)
+    assert pcbs, f"git no trackea ningún .kicad_pcb en {raiz} — ¿es un repo?"
+    return pcbs
+
+
 def render_conectores(raiz):
-    pcbs = sorted(p for p in glob.glob(os.path.join(raiz, "**", "*.kicad_pcb"), recursive=True)
-                  if ".backups" not in p)
+    pcbs = pcbs_versionados(raiz)
     lineas = [PCB_BANNER, "",
               "# Conectores — qué net tiene cada pin",
               "",
