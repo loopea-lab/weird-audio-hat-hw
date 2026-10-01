@@ -28,3 +28,5 @@ The codec clocks from the Pi's GPCLK0 instead.
 
 **Q2's schematic Datasheet field points at `BC818-D.pdf`**, which is a small-signal
 NPN — not this 3 GHz wideband part. The file here is the right one.
+
+These datasheets are copyright of their manufacturers and are not covered by this repository's license.

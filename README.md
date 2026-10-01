@@ -69,3 +69,7 @@ Two things to know if you have an **R0.2 board from the first run**:
 - **Output resistors R6/R22/R23 are populated at 0 Ω** and mute the three outputs. Remove them.
   The schematic ships corrected at 100 kΩ, so later runs don't need this.
 - **Mono out (J2)** needs its DAPM block enabled in the driver.
+
+## License
+
+CC BY-SA 4.0 — see [`LICENSE`](LICENSE). Datasheets in `datasheets/` are copyright of their manufacturers.
