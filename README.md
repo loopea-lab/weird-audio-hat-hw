@@ -73,3 +73,5 @@ Two things to know if you have an **R0.2 board from the first run**:
 ## License
 
 CC BY-SA 4.0 — see [`LICENSE`](LICENSE). Datasheets in `datasheets/` are copyright of their manufacturers.
+
+Copyright © 2024–2026 Weird Electronics / Loopea Lab.
