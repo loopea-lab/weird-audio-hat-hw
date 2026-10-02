@@ -39,17 +39,18 @@ drive the whole thing.
 
 ## Connectors
 
-Every pin of every connector, with the net it carries, read from the
-copper: [`CONNECTORS.md`](CONNECTORS.md). Generated from the PCB — if it disagrees with
-the board, the board wins and the file is stale.
+| Ref | Type | Carries |
+|-----|------|---------|
+| J5 | 3.5 mm jack | Line in L (tip) |
+| J1 | 3.5 mm jack | Line in R (tip) — MICBIAS when SW1 is on |
+| J4 | 3.5 mm stereo jack | Line / headphone out — tip L, ring R \* |
+| J2 | 3.5 mm jack | Mono out (tip) |
+| J6 | 1×4 header | Line in from the panel — 1 GND · 2 R · 3 GND · 4 L |
+| J7 | 1×4 header | Line out to the panel — 1 GND · 2 R · 3 GND · 4 L |
+| J3 | 2×20 Pi header | I2C (3, 5) · I2S (12, 35, 38, 40) · GPCLK0 (7) · 3.3 V / 5 V |
+| SW1 | slide switch | MICBIAS onto J1 |
 
-## Connections
-
-| Jack | |
-|------|--|
-| **J5 / J1** | line in L / R — J1 also carries MICBIAS for an electret mic |
-| **J4** | stereo line out |
-| **J2** | mono out |
+\* R1.1: L and R are swapped; the driver's `DAC L/R Swap` control corrects it.
 
 Codec on I2C `0x1A`.
 
