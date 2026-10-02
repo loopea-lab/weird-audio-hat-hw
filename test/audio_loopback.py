@@ -1,18 +1,14 @@
 #!/usr/bin/env python3
-"""Audio HAT — mide un loopback de salida a entrada. Corre en el Pi.
+"""Audio HAT — measures an output-to-input loopback. Runs on the Pi.
 
-Manda un tono por UN canal a la vez y graba los dos. Responde tres cosas que no se
-pueden ver escuchando: si pasa senal, si L es L y R es R, y cuanta se filtra al otro
-canal.
+Plays a tone on ONE channel at a time and records both: does signal pass, is L really L,
+and how much leaks into the other channel. Levels in dBFS.
 
-  python3 audio_loopback.py            # 1 kHz, el mapeo de canales
-  python3 audio_loopback.py -f 300     # otra frecuencia
+  python3 audio_loopback.py            # 1 kHz
+  python3 audio_loopback.py -f 300     # another frequency
 
-NO sirve para cifras de calidad. El loopback full-duplex del WM8960 tiene un artefacto
-propio — un pozo de ~5.7 dB alrededor de 1.6 kHz — que no es un defecto de la placa. La
-planitud publicada se mide record-only, con fuente externa.
-
-Los niveles se informan en dBFS: 0 dBFS es fondo de escala.
+Not for quality figures: the WM8960's full-duplex loopback has its own ~5.7 dB dip around
+1.6 kHz that is not the board.
 """
 
 import argparse
@@ -27,11 +23,11 @@ from audio_hat_constants import (BOARD_NAME, BOARD_REV, CHANNELS, LOOPBACK_CROSS
                                  LOOPBACK_NO_SIGNAL, LOOPBACK_SEPARATION, SAMPLE_FORMAT,
                                  SAMPLE_RATE_HZ)
 
-AMPLITUD = 0.30          # lejos del clip, para que el resultado no sea recorte
+AMPLITUD = 0.30          # well below clipping
 DUR_TONO = 3.0
 DUR_GRABA = 4.0
-VENTANA = (0.7, 2.7)     # tramo estable, sin el arranque del stream
-PISO_UTIL_DB = -60.0     # por debajo de esto no hay senal, hay ruido
+VENTANA = (0.7, 2.7)     # steady part, past the stream start
+PISO_UTIL_DB = -60.0     # below this there is only noise
 
 DTYPE = {"S32_LE": "<i4", "S16_LE": "<i2"}[SAMPLE_FORMAT]
 ESCALA = float(2 ** (8 * np.dtype(DTYPE).itemsize - 1))
@@ -55,7 +51,7 @@ def corrida(canal, hz, card):
     with open(crudo, "wb") as f:
         f.write(tono(canal, hz))
     if os.path.exists(grabado):
-        os.remove(grabado)          # nunca leer una captura de una corrida anterior
+        os.remove(grabado)          # never read a previous run's capture
 
     comun = ["-f", SAMPLE_FORMAT, "-r", str(SAMPLE_RATE_HZ), "-c", str(CHANNELS), "-t", "raw"]
     rec = subprocess.Popen(["arecord", "-D", card, *comun, "-d", str(int(DUR_GRABA)), grabado],
@@ -72,42 +68,36 @@ def corrida(canal, hz, card):
 
 
 def veredicto(canal, izq, der):
-    """Decide que significan dos niveles en dBFS. Pura a proposito: es la parte que
-    puede estar mal aunque la medicion este bien, y asi se testea sin hardware.
-
-    Devuelve (texto, [problemas])."""
+    """What two dBFS levels mean, as (text, [problems]). Pure, so it is tested without hardware."""
     esperado, otro = (izq, der) if canal == "L" else (der, izq)
     nombre_otro = "R" if canal == "L" else "L"
     ps = []
 
     if max(esperado, otro) < PISO_UTIL_DB:
         v = "%s on either channel" % LOOPBACK_NO_SIGNAL
-        ps.append("%s: no llega senal (max %.1f dBFS). Revisar que el DAC este ruteado y "
-                  "las entradas no esten mudas." % (canal, max(esperado, otro)))
+        ps.append("%s: no signal arrives (max %.1f dBFS). Check the DAC is routed and the "
+                  "inputs are not muted." % (canal, max(esperado, otro)))
     elif otro > esperado + 20:
-        # el caso que este script existe para encontrar
         v = "%s: out on %s, in on %s" % (LOOPBACK_CROSSED, canal, nombre_otro)
-        ps.append("%s: la senal aparece en %s, %.1f dB por encima de %s"
+        ps.append("%s: the signal shows up on %s, %.1f dB above %s"
                   % (canal, nombre_otro, otro - esperado, canal))
     elif esperado < PISO_UTIL_DB:
         v = "%s on %s" % (LOOPBACK_NO_SIGNAL, canal)
-        ps.append("%s: no llega senal (%.1f dBFS)" % (canal, esperado))
+        ps.append("%s: no signal arrives (%.1f dBFS)" % (canal, esperado))
     elif otro > esperado - 20:
-        v = "canales mezclados (separacion %.1f dB)" % (esperado - otro)
-        ps.append("%s: separacion de solo %.1f dB" % (canal, esperado - otro))
+        v = "channels mixed (separation %.1f dB)" % (esperado - otro)
+        ps.append("%s: only %.1f dB of separation" % (canal, esperado - otro))
     else:
         v = "ok, %s %.1f dB" % (LOOPBACK_SEPARATION, esperado - otro)
 
     if max(esperado, otro) > -3.0:
-        v += "  ⚠ cerca del clip"
-        ps.append("%s: el nivel de entrada esta a %.1f dBFS, casi recortando: bajar "
-                  "'Input Line' o la amplitud" % (canal, max(esperado, otro)))
+        v += "  ⚠ near clipping"
+        ps.append("%s: the input is at %.1f dBFS, nearly clipping: lower "
+                  "'Input Line' or the amplitude" % (canal, max(esperado, otro)))
     return v, ps
 
 
 def _cabecera():
-    """Toda salida de test dice contra que hardware corrio. La revision sale de
-    constants.yaml, que la toma de la serigrafia: no se escribe a mano en ningun lado."""
     print("=== %s %s ===" % (BOARD_NAME, BOARD_REV))
 
 
@@ -118,30 +108,30 @@ def main():
     a = p.parse_args()
 
     _cabecera()
-    print("tono de %g Hz a %.0f%% de fondo de escala, %s @ %d Hz"
+    print("%g Hz tone at %.0f%% of full scale, %s @ %d Hz"
           % (a.freq, AMPLITUD * 100, SAMPLE_FORMAT, SAMPLE_RATE_HZ))
     print()
-    print("  %-10s %10s %10s   %s" % ("envio", "RMS L", "RMS R", "veredicto"))
+    print("  %-10s %10s %10s   %s" % ("sent", "RMS L", "RMS R", "verdict"))
 
     problemas = []
     for canal in ("L", "R"):
         r = corrida(canal, a.freq, a.device)
         if r is None:
-            print("  %-10s  captura vacia o corta" % (canal + " sola"))
-            problemas.append("%s: no se grabo nada" % canal)
+            print("  %-10s  empty or short capture" % (canal + " only"))
+            problemas.append("%s: nothing was recorded" % canal)
             continue
         izq, der = db(r[0]), db(r[1])
         v, ps = veredicto(canal, izq, der)
         problemas += ps
-        print("  %-10s %9.1f %9.1f   %s" % (canal + " sola", izq, der, v))
+        print("  %-10s %9.1f %9.1f   %s" % (canal + " only", izq, der, v))
 
     print()
     if problemas:
-        print("PROBLEMAS:")
+        print("PROBLEMS:")
         for x in problemas:
             print("  - " + x)
         return 1
-    print("El camino de ida y vuelta funciona y los canales no estan cruzados.")
+    print("The round trip works and the channels are not crossed.")
     return 0
 
 
