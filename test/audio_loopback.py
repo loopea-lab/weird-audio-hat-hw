@@ -23,7 +23,9 @@ import sys
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from audio_hat_constants import BOARD_NAME, BOARD_REV, CHANNELS, SAMPLE_FORMAT, SAMPLE_RATE_HZ  # noqa: E402
+from audio_hat_constants import (BOARD_NAME, BOARD_REV, CHANNELS, LOOPBACK_CROSSED,  # noqa: E402
+                                 LOOPBACK_NO_SIGNAL, LOOPBACK_SEPARATION, SAMPLE_FORMAT,
+                                 SAMPLE_RATE_HZ)
 
 AMPLITUD = 0.30          # lejos del clip, para que el resultado no sea recorte
 DUR_TONO = 3.0
@@ -79,22 +81,22 @@ def veredicto(canal, izq, der):
     ps = []
 
     if max(esperado, otro) < PISO_UTIL_DB:
-        v = "SIN SENAL en ningun canal"
+        v = "%s on either channel" % LOOPBACK_NO_SIGNAL
         ps.append("%s: no llega senal (max %.1f dBFS). Revisar que el DAC este ruteado y "
                   "las entradas no esten mudas." % (canal, max(esperado, otro)))
     elif otro > esperado + 20:
         # el caso que este script existe para encontrar
-        v = "CRUZADO: sale por %s, entra por %s" % (canal, nombre_otro)
+        v = "%s: out on %s, in on %s" % (LOOPBACK_CROSSED, canal, nombre_otro)
         ps.append("%s: la senal aparece en %s, %.1f dB por encima de %s"
                   % (canal, nombre_otro, otro - esperado, canal))
     elif esperado < PISO_UTIL_DB:
-        v = "SIN SENAL en %s" % canal
+        v = "%s on %s" % (LOOPBACK_NO_SIGNAL, canal)
         ps.append("%s: no llega senal (%.1f dBFS)" % (canal, esperado))
     elif otro > esperado - 20:
         v = "canales mezclados (separacion %.1f dB)" % (esperado - otro)
         ps.append("%s: separacion de solo %.1f dB" % (canal, esperado - otro))
     else:
-        v = "ok, separacion %.1f dB" % (esperado - otro)
+        v = "ok, %s %.1f dB" % (LOOPBACK_SEPARATION, esperado - otro)
 
     if max(esperado, otro) > -3.0:
         v += "  ⚠ cerca del clip"

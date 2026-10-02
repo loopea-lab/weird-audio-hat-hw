@@ -81,3 +81,17 @@ jacks:
     note: >-
       Inputs are single-ended (LINPUT1/2 and RINPUT1/2 unconnected), so differential
       mode is not possible. J1 is the only one with MICBIAS, switched by SW1.
+
+loopback:
+  LOOPBACK_NO_SIGNAL:
+    value: NO SIGNAL
+    source: design_target
+    note: audio_loopback.py prints it; stack_test.py looks for it
+  LOOPBACK_CROSSED:
+    value: CROSSED
+    source: design_target
+    note: audio_loopback.py prints it; stack_test.py looks for it
+  LOOPBACK_SEPARATION:
+    value: separation
+    source: design_target
+    note: audio_loopback.py prints '<this> N dB'; stack_test.py reads N from it

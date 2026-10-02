@@ -14,20 +14,21 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 pytest.importorskip("numpy", reason="audio_loopback importa numpy")
 from audio_loopback import veredicto  # noqa: E402
+from audio_hat_constants import LOOPBACK_CROSSED, LOOPBACK_NO_SIGNAL  # noqa: E402
 
 
 # (canal, dB en L, dB en R, fragmento que tiene que aparecer, ¿es problema?)
 CASOS = [
     # el caso real medido: mando por L y aparece en R a -2.3 dBFS
-    ("L", -71.9, -2.3, "CRUZADO", True),
-    ("R", -2.3, -82.0, "CRUZADO", True),
+    ("L", -71.9, -2.3, LOOPBACK_CROSSED, True),
+    ("R", -2.3, -82.0, LOOPBACK_CROSSED, True),
     # el mismo cruce con niveles sanos, sin aviso de clip
-    ("L", -88.9, -10.6, "CRUZADO", True),
+    ("L", -88.9, -10.6, LOOPBACK_CROSSED, True),
     # lo que se espera de un loopback bien cableado
     ("L", -10.5, -88.0, "ok", False),
     ("R", -88.0, -10.5, "ok", False),
     # nada conectado, o el DAC sin rutear: los dos canales en el piso
-    ("L", -84.2, -84.5, "SIN SENAL en ningun canal", True),
+    ("L", -84.2, -84.5, LOOPBACK_NO_SIGNAL + " on either channel", True),
     # llega a los dos por igual: canales sumados en algún lado
     ("L", -12.0, -13.0, "mezclados", True),
     # el canal correcto pero rozando el fondo de escala
@@ -49,7 +50,7 @@ def test_una_senal_fuerte_nunca_se_reporta_como_ausente():
     for canal in ("L", "R"):
         for izq, der in [(-2.3, -80.0), (-80.0, -2.3), (-10.0, -70.0), (-70.0, -10.0)]:
             texto, _ = veredicto(canal, izq, der)
-            assert "SIN SENAL en ningun canal" not in texto, (
+            assert LOOPBACK_NO_SIGNAL not in texto, (
                 f"{canal} con L={izq} R={der} tiene señal de sobra y dijo {texto!r}")
 
 
@@ -57,5 +58,5 @@ def test_el_cruce_se_nombra_en_las_dos_direcciones():
     """Mandar por L y recibir en R, y al revés, tienen que decir a dónde fue."""
     t_l, _ = veredicto("L", -80.0, -10.0)
     t_r, _ = veredicto("R", -10.0, -80.0)
-    assert "sale por L, entra por R" in t_l
-    assert "sale por R, entra por L" in t_r
+    assert "out on L, in on R" in t_l
+    assert "out on R, in on L" in t_r

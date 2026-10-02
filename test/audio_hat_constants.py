@@ -38,3 +38,11 @@ JACKS = (
      'J4': {'dir': 'out', 'channel': 'LR', 'pin': 'HP_L/HP_R'},
      'J2': {'dir': 'out', 'channel': 'mono', 'pin': 'OUT3'}}
 )
+
+# --- loopback ---
+# (design_target) audio_loopback.py prints it; stack_test.py looks for it
+LOOPBACK_NO_SIGNAL = 'NO SIGNAL'
+# (design_target) audio_loopback.py prints it; stack_test.py looks for it
+LOOPBACK_CROSSED = 'CROSSED'
+# (design_target) audio_loopback.py prints '<this> N dB'; stack_test.py reads N from it
+LOOPBACK_SEPARATION = 'separation'
