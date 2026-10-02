@@ -1,19 +1,17 @@
 #!/usr/bin/env bash
-# Audio HAT (WM8960) — checks automatizables de bring-up.
-# Corre EN el Raspberry Pi, despues de instalar el driver (weird-audio-hat-driver) y rebootear.
-# Los pasos de multimetro / osciloscopio son manuales: estan en el manual del modulo.
+# Audio HAT (WM8960) — automated bring-up checks.
+# Runs on the Pi, after installing weird-audio-hat-driver and rebooting.
 #
-# Uso:
-#   ./audio-bringup.sh            # corre todos los checks (loopback 5s)
-#   ./audio-bringup.sh -t 10      # loopback de 10s
+#   ./audio-bringup.sh            # every check, 5 s loopback
+#   ./audio-bringup.sh -t 10      # 10 s loopback
 
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
 
-# Las constantes salen de constants.yaml via el modulo generado: este script no las repite.
+# Constants come from the generated module.
 k() {
   python3 -c "import sys; sys.path.insert(0, '$HERE'); import audio_hat_constants as c; print(eval(sys.argv[1], vars(c)))" "$1" \
-    || { echo "no se pudo leer '$1' de audio_hat_constants.py (¿esta al lado de este script?)" >&2; exit 1; }
+    || { echo "could not read '$1' from audio_hat_constants.py (is it next to this script?)" >&2; exit 1; }
 }
 FMT=$(k SAMPLE_FORMAT)
 RATE=$(k SAMPLE_RATE_HZ)
@@ -27,63 +25,62 @@ LOOP_SECONDS=5
 while getopts "t:h" opt; do
   case "$opt" in
     t) LOOP_SECONDS="$OPTARG" ;;
-    h) echo "uso: $0 [-t segundos_loopback]"; exit 0 ;;
+    h) echo "usage: $0 [-t loopback_seconds]"; exit 0 ;;
     *) exit 1 ;;
   esac
 done
 
 pass() { echo "  [OK]   $1"; }
-fail() { echo "  [FALLA] $1"; FAILED=1; }
+fail() { echo "  [FAIL] $1"; FAILED=1; }
 FAILED=0
 
 echo "=== $BOARD $REV — bring-up ==="
-echo "    revision segun la serigrafia de la placa; si la tuya dice otra cosa, este script no es para ella"
+echo "    revision as printed on the board; if yours says otherwise, this script is not for it"
 
-# 1. I2C: el codec debe aparecer en 0x1A
+# 1. I2C: the codec answers at 0x1A
 echo "--- I2C (codec @ 0x$I2C_ADDR) ---"
 if ! command -v i2cdetect >/dev/null; then
-  echo "  i2cdetect no instalado: sudo apt install i2c-tools"
+  echo "  i2cdetect not installed: sudo apt install i2c-tools"
 elif i2cdetect -y 1 2>/dev/null | grep -qiE "(^| )$I2C_ADDR( |\$)"; then
-  pass "codec detectado en 0x$I2C_ADDR (i2c-1)"
+  pass "codec found at 0x$I2C_ADDR (i2c-1)"
 else
-  fail "codec NO detectado en 0x$I2C_ADDR. Revisar I2C habilitado, soldadura U1, riel +3.3VA."
+  fail "codec NOT found at 0x$I2C_ADDR. Check I2C is enabled, U1 soldering, the +3.3VA rail."
   i2cdetect -y 1 2>/dev/null || true
 fi
 
-# 2. Enumeracion ALSA: la card la nombra constants.yaml
+# 2. ALSA enumeration
 echo "--- ALSA (driver wm8960-soundcard) ---"
 if aplay -l 2>/dev/null | grep -qi "$CARD_NAME"; then
   CARD=$(aplay -l 2>/dev/null | grep -i "$CARD_NAME" | head -1 | sed -E 's/^card ([0-9]+):.*/\1/')
-  pass "playback enumerado (card $CARD)"
+  pass "playback enumerated (card $CARD)"
 else
-  fail "$CARD_NAME no aparece en 'aplay -l'. Instalar driver y rebootear."
+  fail "$CARD_NAME missing from 'aplay -l'. Install the driver and reboot."
   CARD=1
 fi
 if arecord -l 2>/dev/null | grep -qi "$CARD_NAME"; then
-  pass "capture enumerado"
+  pass "capture enumerated"
 else
-  fail "$CARD_NAME no aparece en 'arecord -l'."
+  fail "$CARD_NAME missing from 'arecord -l'."
 fi
 
-# 3. Loopback capture->playback
-echo "--- Loopback ${LOOP_SECONDS}s (inyectar senal en J5 = line in L, o J1 = line in R) ---"
+# 3. Capture-to-playback loopback
+echo "--- Loopback ${LOOP_SECONDS}s (feed a signal into J5 = line in L, or J1 = line in R) ---"
 if aplay -l 2>/dev/null | grep -qi "$CARD_NAME"; then
   echo "  arecord -f $FMT -D hw:${CARD} | aplay -D hw:${CARD}  (${LOOP_SECONDS}s)"
   timeout "${LOOP_SECONDS}" sh -c "arecord -f $FMT -r $RATE -c $NCH -D hw:${CARD} 2>/dev/null \
                                    | aplay -f $FMT -r $RATE -c $NCH -D hw:${CARD} 2>/dev/null"
-  echo "  (escuchaste el loopback en line-out/headphone? marcar en el checklist)"
+  echo "  (did you hear it on line out / headphones?)"
 else
-  echo "  (saltado: sin card wm8960)"
+  echo "  (skipped: no wm8960 card)"
 fi
 
-# 4. Captura a archivo para inspeccion
-echo "--- Captura a /tmp/wm8960_test.wav (5s) ---"
+# 4. Capture to a file for inspection
+echo "--- Capture to /tmp/wm8960_test.wav (5s) ---"
 if aplay -l 2>/dev/null | grep -qi "$CARD_NAME"; then
   arecord -D "hw:${CARD},0" -f "$FMT" -r "$RATE" -c "$NCH" -d 5 /tmp/wm8960_test.wav 2>/dev/null \
-    && pass "grabado /tmp/wm8960_test.wav (reproducir con: aplay -D hw:${CARD},0 /tmp/wm8960_test.wav)" \
-    || fail "arecord fallo"
+    && pass "recorded /tmp/wm8960_test.wav (play with: aplay -D hw:${CARD},0 /tmp/wm8960_test.wav)" \
+    || fail "arecord failed"
 fi
 
-echo "=== fin: $([ "$FAILED" -eq 0 ] && echo 'todos los checks automaticos OK' || echo 'hubo fallas, revisar arriba') ==="
-echo "Pasos manuales (multimetro/scope): ver el manual del modulo."
+echo "=== done: $([ "$FAILED" -eq 0 ] && echo 'all automated checks OK' || echo 'failures above') ==="
 exit "$FAILED"
