@@ -20,8 +20,6 @@ a microphone input with bias. It shows up as a normal ALSA sound card.
 | Inputs | single-ended, line level | schematic |
 | Outputs | stereo line / headphone, mono | schematic |
 
-![Crosstalk](assets/crosstalk.png)
-
 ## Requirements
 
 **Raspberry Pi 1–4 or Zero 2W — not a Pi 5.** The codec has no oscillator; it takes its master
