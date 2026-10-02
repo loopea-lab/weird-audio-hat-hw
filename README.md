@@ -1,41 +1,32 @@
 # Weird Audio HAT
 
-Hi-fi stereo audio for your Raspberry Pi — a WM8960 sound card with stereo line in/out, headphone, and
-mic. Part of the **Weird** system (pair it with the
-[Weird MCP Inputs](https://github.com/loopea-lab/weird-mcp-inputs) for CV + MIDI).
+A WM8960 sound card for the Raspberry Pi: stereo line in and out, headphone amp, mono out and
+a microphone input with bias. It shows up as a normal ALSA sound card.
 
 ![Weird Audio HAT](WM_RB-HAT.png)
 
-## What it does
+## Specifications
 
-- **Stereo line in & out**, **headphone** amp, **mic in** (with MICBIAS)
-- Shows up as a normal **ALSA sound card** — record and play like any USB interface
-- Hi-fi: flat response (±0.5 dB, 100 Hz–8 kHz), output THD **0.003%**, crosstalk **-67 to -92 dB**
+| | Value | Source |
+|---|---|---|
+| Codec | WM8960, stereo, 24-bit | rated |
+| Sample rates | 44.1 kHz family (master clock 11.2896 MHz) | rated |
+| Sample formats | `S16_LE`, `S24_LE`, `S32_LE` — **not** `S24_3LE` | rated |
+| Control | I2C, address `0x1A` | rated |
+| Frequency response | ±0.5 dB, 100 Hz – 8 kHz | measured |
+| Output THD (DAC) | 0.003 % at 1 kHz | measured |
+| Crosstalk between inputs | −67 to −92 dB across the band | measured |
+| MICBIAS | ~3 V (0.9 × AVDD) | measured |
+| Inputs | single-ended, line level | schematic |
+| Outputs | stereo line / headphone, mono | schematic |
 
 ![Crosstalk](assets/crosstalk.png)
 
-*Crosstalk between inputs: -67 to -92 dB (pro level).*
+## Requirements
 
-## What you can do with it
-
-Record a synth, guitar or mixer straight into your Pi; play audio back out to your rack or monitors;
-build a Pi-based effects box, looper or sampler. Pair it with the MCP Inputs HAT and your modular can
-drive the whole thing.
-
-## Quick start
-
-1. Seat the HAT on the Pi and install the driver (see [weird-audio-hat-driver](https://github.com/loopea-lab/weird-audio-hat-driver)).
-2. Confirm it's detected:
-   ```bash
-   aplay -l        # → card: wm8960soundcard
-   ```
-3. Record and play back (capture must be **S32_LE**):
-   ```bash
-   arecord -D hw:wm8960soundcard -f S32_LE -r 44100 -c 2 take.wav
-   aplay   -D hw:wm8960soundcard take.wav
-   ```
-
-> **Use a Pi Zero 2W or Pi 1–4 — not a Pi 5.** The codec clock comes from the Pi's GPCLK0, which the Pi 5 doesn't have.
+**Raspberry Pi 1–4 or Zero 2W — not a Pi 5.** The codec has no oscillator; it takes its master
+clock from the Pi's GPCLK0, which the Pi 5 does not expose. 48 kHz needs a different clock and
+a device-tree change.
 
 ## Connectors
 
@@ -45,30 +36,57 @@ drive the whole thing.
 | J1 | 3.5 mm jack | Line in R (tip) — MICBIAS when SW1 is on |
 | J4 | 3.5 mm stereo jack | Line / headphone out — tip L, ring R \* |
 | J2 | 3.5 mm jack | Mono out (tip) |
-| J6 | 1×4 header | Line in from the panel — 1 GND · 2 R · 3 GND · 4 L |
-| J7 | 1×4 header | Line out to the panel — 1 GND · 2 R · 3 GND · 4 L |
+| J6 | 1×4 header | Line in from a panel — 1 GND · 2 R · 3 GND · 4 L |
+| J7 | 1×4 header | Line out to a panel — 1 GND · 2 R · 3 GND · 4 L |
 | J3 | 2×20 Pi header | I2C (3, 5) · I2S (12, 35, 38, 40) · GPCLK0 (7) · 3.3 V / 5 V |
 | SW1 | slide switch | MICBIAS onto J1 |
 
 \* R1.1: L and R are swapped; the driver's `DAC L/R Swap` control corrects it.
 
-Codec on I2C `0x1A`.
+## Using it
 
-## Documentation
+Install the driver: [weird-audio-hat-driver](https://github.com/loopea-lab/weird-audio-hat-driver).
+It covers recording, playback, routing and gain.
 
-Full manual for the Weird system — assembly, specifications, software and
-troubleshooting: **https://github.com/loopea-lab/weird**
+- **Inputs are single-ended** (LINPUT3 / RINPUT3). The codec's differential mode is not wired.
+- **Headphone out** is AC-coupled; it drives 32 Ω headphones or a line input.
+- **Microphone:** SW1 puts MICBIAS on J1 only. `MIC Bias` must also be enabled in software.
 
-This board's page: [Audio Hat](https://github.com/loopea-lab/weird/blob/main/modules/audio-hat.md).
+## Troubleshooting
+
+**No sound card in `aplay -l`.** Not on a Pi 5? Driver installed? Do not add
+`dtoverlay=wm8960-soundcard` to `config.txt` — the driver's service loads it. `i2cdetect -y 1`
+should show `1a`.
+
+**Recording fails or is silent.** Use `S32_LE` (or `S16_LE` / `S24_LE`); `S24_3LE` fails and
+looks like dead hardware. If the format is right, the input path is muted — see the driver README.
+
+**No audio from any output.** See known issues below.
+
+## Known issues
+
+**R1.1, first run — outputs shorted to ground.** R6, R22 and R23 shipped as 0 Ω instead of
+100 kΩ. Remove them. Check: tip of an output jack to ground reads near 0 Ω while the short is
+there. The schematic is corrected, so later runs don't have this.
+
+**R1.1 — output jacks labelled the wrong way round.** Enable the driver's `DAC L/R Swap` control.
 
 ## Revisions
 
-Branches: `main` = R0.1 (legacy) · `dev` = **R0.2** (current).
+| Revision | | Tag |
+|---|---|---|
+| **R1.1** | SMD, 4 layers — current | `AudioHat-R1.1-production` |
+| Rev A | through-hole, first release | `AudioHat-RA` |
 
-One thing to know if you have an **R0.2 board from the first run**:
+The revision is the one printed on the board.
 
-- **Output resistors R6/R22/R23 are populated at 0 Ω** and mute the three outputs. Remove them.
-  The schematic ships corrected at 100 kΩ, so later runs don't need this.
+## Combine it with
+
+- [Weird Piano HAT](https://github.com/loopea-lab/weird-piano-hat) — keys and pots, an
+  instrument with Pure Data.
+- [Weird MCP Inputs](https://github.com/loopea-lab/weird-mcp-inputs) + Control Board + panel —
+  a Eurorack module. J6 / J7 carry audio to the panel; the stacking header passes the MCP's
+  signals through, so use a good one.
 
 ## License
 
