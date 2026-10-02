@@ -23,81 +23,81 @@ from audio_hat_constants import (BOARD_NAME, BOARD_REV, CHANNELS, LOOPBACK_CROSS
                                  LOOPBACK_NO_SIGNAL, LOOPBACK_SEPARATION, SAMPLE_FORMAT,
                                  SAMPLE_RATE_HZ)
 
-AMPLITUD = 0.30          # well below clipping
-DUR_TONO = 3.0
-DUR_GRABA = 4.0
-VENTANA = (0.7, 2.7)     # steady part, past the stream start
-PISO_UTIL_DB = -60.0     # below this there is only noise
+AMPLITUDE = 0.30          # well below clipping
+TONE_SECONDS = 3.0
+RECORD_SECONDS = 4.0
+WINDOW = (0.7, 2.7)     # steady part, past the stream start
+FLOOR_DB = -60.0     # below this there is only noise
 
 DTYPE = {"S32_LE": "<i4", "S16_LE": "<i2"}[SAMPLE_FORMAT]
-ESCALA = float(2 ** (8 * np.dtype(DTYPE).itemsize - 1))
+SCALE = float(2 ** (8 * np.dtype(DTYPE).itemsize - 1))
 
 
-def tono(canal, hz):
-    n = int(SAMPLE_RATE_HZ * DUR_TONO)
+def tone(channel, hz):
+    n = int(SAMPLE_RATE_HZ * TONE_SECONDS)
     t = np.arange(n) / SAMPLE_RATE_HZ
-    s = (AMPLITUD * np.sin(2 * np.pi * hz * t) * (ESCALA - 1)).astype(DTYPE)
+    s = (AMPLITUDE * np.sin(2 * np.pi * hz * t) * (SCALE - 1)).astype(DTYPE)
     z = np.zeros(n, dtype=DTYPE)
-    return np.column_stack([s, z] if canal == "L" else [z, s]).tobytes()
+    return np.column_stack([s, z] if channel == "L" else [z, s]).tobytes()
 
 
 def db(x):
     return float("-inf") if x <= 0 else 20 * np.log10(x)
 
 
-def corrida(canal, hz, card):
-    crudo = "/tmp/lb_tono_%s.raw" % canal
-    grabado = "/tmp/lb_rec_%s.raw" % canal
-    with open(crudo, "wb") as f:
-        f.write(tono(canal, hz))
-    if os.path.exists(grabado):
-        os.remove(grabado)          # never read a previous run's capture
+def run_once(channel, hz, card):
+    raw_path = "/tmp/lb_tono_%s.raw" % channel
+    rec_path = "/tmp/lb_rec_%s.raw" % channel
+    with open(raw_path, "wb") as f:
+        f.write(tone(channel, hz))
+    if os.path.exists(rec_path):
+        os.remove(rec_path)          # never read a previous run's capture
 
-    comun = ["-f", SAMPLE_FORMAT, "-r", str(SAMPLE_RATE_HZ), "-c", str(CHANNELS), "-t", "raw"]
-    rec = subprocess.Popen(["arecord", "-D", card, *comun, "-d", str(int(DUR_GRABA)), grabado],
+    common = ["-f", SAMPLE_FORMAT, "-r", str(SAMPLE_RATE_HZ), "-c", str(CHANNELS), "-t", "raw"]
+    rec = subprocess.Popen(["arecord", "-D", card, *common, "-d", str(int(RECORD_SECONDS)), rec_path],
                            stderr=subprocess.DEVNULL)
-    subprocess.run(["aplay", "-D", card, *comun, crudo], stderr=subprocess.DEVNULL)
+    subprocess.run(["aplay", "-D", card, *common, raw_path], stderr=subprocess.DEVNULL)
     rec.wait()
 
-    d = np.fromfile(grabado, dtype=DTYPE)
+    d = np.fromfile(rec_path, dtype=DTYPE)
     if d.size < SAMPLE_RATE_HZ * CHANNELS:
         return None
-    d = d.reshape(-1, CHANNELS).astype(float) / ESCALA
-    a = d[int(SAMPLE_RATE_HZ * VENTANA[0]):int(SAMPLE_RATE_HZ * VENTANA[1])]
+    d = d.reshape(-1, CHANNELS).astype(float) / SCALE
+    a = d[int(SAMPLE_RATE_HZ * WINDOW[0]):int(SAMPLE_RATE_HZ * WINDOW[1])]
     return [float(np.sqrt((a[:, i] ** 2).mean())) for i in range(CHANNELS)]
 
 
-def veredicto(canal, izq, der):
+def verdict(channel, left, right):
     """What two dBFS levels mean, as (text, [problems]). Pure, so it is tested without hardware."""
-    esperado, otro = (izq, der) if canal == "L" else (der, izq)
-    nombre_otro = "R" if canal == "L" else "L"
+    expected, other = (left, right) if channel == "L" else (right, left)
+    other_name = "R" if channel == "L" else "L"
     ps = []
 
-    if max(esperado, otro) < PISO_UTIL_DB:
+    if max(expected, other) < FLOOR_DB:
         v = "%s on either channel" % LOOPBACK_NO_SIGNAL
         ps.append("%s: no signal arrives (max %.1f dBFS). Check the DAC is routed and the "
-                  "inputs are not muted." % (canal, max(esperado, otro)))
-    elif otro > esperado + 20:
-        v = "%s: out on %s, in on %s" % (LOOPBACK_CROSSED, canal, nombre_otro)
+                  "inputs are not muted." % (channel, max(expected, other)))
+    elif other > expected + 20:
+        v = "%s: out on %s, in on %s" % (LOOPBACK_CROSSED, channel, other_name)
         ps.append("%s: the signal shows up on %s, %.1f dB above %s"
-                  % (canal, nombre_otro, otro - esperado, canal))
-    elif esperado < PISO_UTIL_DB:
-        v = "%s on %s" % (LOOPBACK_NO_SIGNAL, canal)
-        ps.append("%s: no signal arrives (%.1f dBFS)" % (canal, esperado))
-    elif otro > esperado - 20:
-        v = "channels mixed (separation %.1f dB)" % (esperado - otro)
-        ps.append("%s: only %.1f dB of separation" % (canal, esperado - otro))
+                  % (channel, other_name, other - expected, channel))
+    elif expected < FLOOR_DB:
+        v = "%s on %s" % (LOOPBACK_NO_SIGNAL, channel)
+        ps.append("%s: no signal arrives (%.1f dBFS)" % (channel, expected))
+    elif other > expected - 20:
+        v = "channels mixed (separation %.1f dB)" % (expected - other)
+        ps.append("%s: only %.1f dB of separation" % (channel, expected - other))
     else:
-        v = "ok, %s %.1f dB" % (LOOPBACK_SEPARATION, esperado - otro)
+        v = "ok, %s %.1f dB" % (LOOPBACK_SEPARATION, expected - other)
 
-    if max(esperado, otro) > -3.0:
+    if max(expected, other) > -3.0:
         v += "  ⚠ near clipping"
         ps.append("%s: the input is at %.1f dBFS, nearly clipping: lower "
-                  "'Input Line' or the amplitude" % (canal, max(esperado, otro)))
+                  "'Input Line' or the amplitude" % (channel, max(expected, other)))
     return v, ps
 
 
-def _cabecera():
+def _header():
     print("=== %s %s ===" % (BOARD_NAME, BOARD_REV))
 
 
@@ -107,28 +107,28 @@ def main():
     p.add_argument("-D", "--device", default="hw:1,0")
     a = p.parse_args()
 
-    _cabecera()
+    _header()
     print("%g Hz tone at %.0f%% of full scale, %s @ %d Hz"
-          % (a.freq, AMPLITUD * 100, SAMPLE_FORMAT, SAMPLE_RATE_HZ))
+          % (a.freq, AMPLITUDE * 100, SAMPLE_FORMAT, SAMPLE_RATE_HZ))
     print()
     print("  %-10s %10s %10s   %s" % ("sent", "RMS L", "RMS R", "verdict"))
 
-    problemas = []
-    for canal in ("L", "R"):
-        r = corrida(canal, a.freq, a.device)
+    problems = []
+    for channel in ("L", "R"):
+        r = run_once(channel, a.freq, a.device)
         if r is None:
-            print("  %-10s  empty or short capture" % (canal + " only"))
-            problemas.append("%s: nothing was recorded" % canal)
+            print("  %-10s  empty or short capture" % (channel + " only"))
+            problems.append("%s: nothing was recorded" % channel)
             continue
-        izq, der = db(r[0]), db(r[1])
-        v, ps = veredicto(canal, izq, der)
-        problemas += ps
-        print("  %-10s %9.1f %9.1f   %s" % (canal + " only", izq, der, v))
+        left, right = db(r[0]), db(r[1])
+        v, ps = verdict(channel, left, right)
+        problems += ps
+        print("  %-10s %9.1f %9.1f   %s" % (channel + " only", left, right, v))
 
     print()
-    if problemas:
+    if problems:
         print("PROBLEMS:")
-        for x in problemas:
+        for x in problems:
             print("  - " + x)
         return 1
     print("The round trip works and the channels are not crossed.")
