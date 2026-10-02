@@ -1,4 +1,4 @@
-# Weird Audio HAT
+# Weird Audio HAT R1.1
 
 A WM8960 sound card for the Raspberry Pi: stereo line in and out, headphone amp, mono out and
 a microphone input with bias. It shows up as a normal ALSA sound card.
@@ -22,9 +22,12 @@ a microphone input with bias. It shows up as a normal ALSA sound card.
 
 ## Requirements
 
-**Raspberry Pi 1–4 or Zero 2W — not a Pi 5.** The codec has no oscillator; it takes its master
-clock from the Pi's GPCLK0, which the Pi 5 does not expose. 48 kHz needs a different clock and
-a device-tree change.
+**Raspberry Pi Zero 2W on 32-bit Raspberry Pi OS** (tested). Pi 1, Zero, 2 and 3 on a 32-bit OS
+should work but are untested. **Not supported:** Pi 4, Pi 5, or any 64-bit OS — the codec has no
+oscillator, and the helper that clocks it from the Pi's GPCLK0 only knows the 32-bit register
+addresses of the older chips.
+
+48 kHz needs a different clock and a device-tree change.
 
 ## Connectors
 
@@ -58,25 +61,6 @@ should show `1a`.
 
 **Recording fails or is silent.** Use `S32_LE` (or `S16_LE` / `S24_LE`); `S24_3LE` fails and
 looks like dead hardware. If the format is right, the input path is muted — see the driver README.
-
-**No audio from any output.** See known issues below.
-
-## Known issues
-
-**R1.1, first run — outputs shorted to ground.** R6, R22 and R23 shipped as 0 Ω instead of
-100 kΩ. Remove them. Check: tip of an output jack to ground reads near 0 Ω while the short is
-there. The schematic is corrected, so later runs don't have this.
-
-**R1.1 — output jacks labelled the wrong way round.** Enable the driver's `DAC L/R Swap` control.
-
-## Revisions
-
-| Revision | | Tag |
-|---|---|---|
-| **R1.1** | SMD, 4 layers — current | `AudioHat-R1.1-production` |
-| Rev A | through-hole, first release | `AudioHat-RA` |
-
-The revision is the one printed on the board.
 
 ## Combine it with
 

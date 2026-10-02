@@ -17,9 +17,12 @@ ALSA_CARD_NAME = 'wm8960soundcard'
 # the board has no oscillator.
 MCLK_HZ = 11289600
 MCLK_GPIO_BCM = 4  # (netlist) J3 pin 7 = BCM4 = GPCLK0 -> R26 -> U1 pin 11 (MCLK)
-# (design_target) Not the Pi 5: minimal_clk writes BCM283x clock registers that the RP1 does not
-# have, and there is no onboard oscillator.
-PI_MODELOS_SOPORTADOS = ['Pi 1', 'Pi 2', 'Pi 3', 'Pi 4', 'Zero 2 W']
+# (design_target) 32-bit OS only; tested on the Zero 2 W. minimal_clk knows only the BCM2835 and
+# BCM2836/7 register bases, so not the Pi 4 (BCM2711) nor the Pi 5 (RP1).
+PI_MODELS = ['Pi 1', 'Pi Zero', 'Pi 2', 'Pi 3', 'Zero 2 W']
+# (design_target) minimal_clk picks the register base from "model name" in /proc/cpuinfo, absent
+# on 64-bit
+SUPPORTED_ARCH = ['armv6l', 'armv7l']
 
 # --- capture ---
 # (design_target) the format for arecord / aplay. Not S24_3LE, not `-f cd`.
