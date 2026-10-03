@@ -7,18 +7,20 @@ a microphone input with bias. It shows up as a normal ALSA sound card.
 
 ## Specifications
 
-| | Value | Source |
-|---|---|---|
-| Codec | WM8960, stereo, 24-bit | rated |
-| Sample rates | 44.1 kHz family (master clock 11.2896 MHz) | rated |
-| Sample formats | `S16_LE`, `S24_LE`, `S32_LE` — **not** `S24_3LE` | rated |
-| Control | I2C, address `0x1A` | rated |
-| Frequency response | ±0.5 dB, 100 Hz – 8 kHz | measured |
-| Output THD (DAC) | 0.003 % at 1 kHz | measured |
-| Crosstalk between inputs | −67 to −92 dB across the band | measured |
-| MICBIAS | ~3 V (0.9 × AVDD) | measured |
-| Inputs | single-ended, line level | schematic |
-| Outputs | stereo line / headphone, mono | schematic |
+| | |
+|---|---|
+| Codec | WM8960, stereo, 24-bit |
+| Sample rates | 44.1 kHz family (master clock 11.2896 MHz) |
+| Sample formats | `S16_LE`, `S24_LE`, `S32_LE` |
+| Control | I2C, address `0x1A` |
+| Frequency response | ±0.5 dB, 100 Hz – 8 kHz † |
+| Output THD (DAC) | 0.003 % at 1 kHz † |
+| Crosstalk between inputs | −67 to −92 dB across the band † |
+| MICBIAS | ~3 V (0.9 × AVDD) † |
+| Inputs | single-ended, line level |
+| Outputs | stereo line / headphone, mono |
+
+† measured on fabricated boards.
 
 ## Requirements
 
