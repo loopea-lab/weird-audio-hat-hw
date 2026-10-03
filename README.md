@@ -39,9 +39,9 @@ addresses of the older chips.
 | J1 | 3.5 mm jack | Line in R (tip) — MICBIAS when SW1 is on |
 | J4 | 3.5 mm stereo jack | Line / headphone out — tip L, ring R \* |
 | J2 | 3.5 mm jack | Mono out (tip) |
-| J6 | 1×4 header | Line in from a panel — 1 GND · 2 R · 3 GND · 4 L |
-| J7 | 1×4 header | Line out to a panel — 1 GND · 2 R · 3 GND · 4 L |
-| J3 | 2×20 Pi header | I2C (3, 5) · I2S (12, 35, 38, 40) · GPCLK0 (7) · 3.3 V / 5 V |
+| J6 | 1×4 header | Line in from a panel (used by the Weird Eurorack panel) — 1 GND · 2 R · 3 GND · 4 L |
+| J7 | 1×4 header | Line out to a panel (used by the Weird Eurorack panel) — 1 GND · 2 R · 3 GND · 4 L |
+| J3 | 2×20 Pi header | I2C (3, 5) · I2S (12, 35, 38, 40) · GPCLK0 (7) · 3.3 V / 5 V. Free GPIOs (BCM): 5–17 and 22–27, including SPI0 and the UART; 0 and 1 are left for a HAT ID EEPROM |
 | SW1 | slide switch | MICBIAS onto J1 |
 
 \* R1.1: L and R are swapped; the driver's `DAC L/R Swap` control corrects it.
