@@ -99,3 +99,14 @@ loopback:
     value: separation
     source: design_target
     note: audio_loopback.py prints '<this> N dB'; stack_test.py reads N from it
+
+micbias:
+  MICBIAS_V:
+    value: 2.97
+    unit: V
+    source: derived
+    note: 0.9 × AVDD (3.3 V), datasheet WM8960
+  MICBIAS_TOLERANCE:
+    value: 0.05
+    source: datasheet
+    note: ±5 %, so 2.82–3.12 V

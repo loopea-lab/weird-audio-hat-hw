@@ -49,3 +49,7 @@ LOOPBACK_NO_SIGNAL = 'NO SIGNAL'
 LOOPBACK_CROSSED = 'CROSSED'
 # (design_target) audio_loopback.py prints '<this> N dB'; stack_test.py reads N from it
 LOOPBACK_SEPARATION = 'separation'
+
+# --- micbias ---
+MICBIAS_V = 2.97  # (derived) V 0.9 × AVDD (3.3 V), datasheet WM8960
+MICBIAS_TOLERANCE = 0.05  # (datasheet) ±5 %, so 2.82–3.12 V
