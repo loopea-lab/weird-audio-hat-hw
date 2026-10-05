@@ -54,6 +54,7 @@ It covers recording, playback, routing and gain.
 - **Inputs are single-ended** (LINPUT3 / RINPUT3). The codec's differential mode is not wired.
 - **Headphone out** is AC-coupled; it drives 32 Ω headphones or a line input.
 - **Microphone:** SW1 puts MICBIAS on J1 only. `MIC Bias` must also be enabled in software.
+- **Line input on J1 needs SW1 off.** With SW1 on, the bias network loads J1 and a line source drops by tens of dB.
 
 ## Troubleshooting
 
