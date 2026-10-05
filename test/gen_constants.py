@@ -14,6 +14,7 @@ import os
 import pprint
 import sys
 import textwrap
+from pathlib import Path
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 YAML = os.path.join(os.path.dirname(HERE), "constants.yaml")
@@ -94,7 +95,7 @@ def main():
 
     out = _output_path()
     want = render(load())
-    have = open(out).read() if os.path.exists(out) else None
+    have = Path(out).read_text() if os.path.exists(out) else None
 
     if a.check:
         if have != want:
