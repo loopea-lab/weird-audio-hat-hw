@@ -64,7 +64,7 @@ else
 fi
 
 # 3. Capture-to-playback loopback
-echo "--- Loopback ${LOOP_SECONDS}s (feed a signal into J5 = line in L, or J1 = line in R) ---"
+echo "--- Loopback ${LOOP_SECONDS}s (feed a signal into IN L or IN R) ---"
 if aplay -l 2>/dev/null | grep -qi "$CARD_NAME"; then
   echo "  arecord -f $FMT -D hw:${CARD} | aplay -D hw:${CARD}  (${LOOP_SECONDS}s)"
   timeout "${LOOP_SECONDS}" sh -c "arecord -f $FMT -r $RATE -c $NCH -D hw:${CARD} 2>/dev/null \

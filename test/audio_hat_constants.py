@@ -33,14 +33,16 @@ SAMPLE_RATE_HZ = 44100
 CHANNELS = 2  # (netlist)
 
 # --- jacks ---
-# (netlist) Inputs are single-ended (LINPUT1/2 and RINPUT1/2 unconnected), so differential mode
-# is not possible. J1 is the only one with MICBIAS, switched by SW1.
+# (netlist) `label` is what is printed next to each jack; the J designators are not on the
+# board. Inputs are single-ended (LINPUT1/2 and RINPUT1/2 unconnected), so no differential mode.
 JACKS = (
-    {'J5': {'dir': 'in', 'channel': 'L', 'pin': 'LINPUT3'},
-     'J1': {'dir': 'in', 'channel': 'R', 'pin': 'RINPUT3'},
-     'J4': {'dir': 'out', 'channel': 'LR', 'pin': 'HP_L/HP_R'},
-     'J2': {'dir': 'out', 'channel': 'mono', 'pin': 'OUT3'}}
+    {'J5': {'dir': 'in', 'channel': 'L', 'pin': 'LINPUT3', 'label': 'IN L'},
+     'J1': {'dir': 'in', 'channel': 'R', 'pin': 'RINPUT3', 'label': 'IN R'},
+     'J4': {'dir': 'out', 'channel': 'LR', 'pin': 'HP_L/HP_R', 'label': 'OUT L/R'},
+     'J2': {'dir': 'out', 'channel': 'mono', 'pin': 'OUT3', 'label': 'OUT MONO'}}
 )
+# (copper) printed next to SW1, which puts MICBIAS on the IN R jack
+MICBIAS_SWITCH_LABEL = 'MIC-R BIAS'
 
 # --- loopback ---
 # (design_target) audio_loopback.py prints it; stack_test.py looks for it
@@ -64,3 +66,5 @@ CROSSTALK_MARGIN_DB = 20.0
 NEAR_CLIP_DB = -3.0
 CLIP_DB = -0.5  # (design_target) dBFS a peak this close to full scale is clipping
 QUIET_DB = -40.0  # (design_target) dBFS above the floor but too low to call a working mic
+# (design_target) dB bench loopback gain; the monitored input never leaves louder than -12 dBFS
+MONITOR_GAIN_DB = -12.0

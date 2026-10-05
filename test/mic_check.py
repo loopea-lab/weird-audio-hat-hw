@@ -10,7 +10,7 @@ number next to the sound.
     ./mic_check.py --seconds 8
     ./mic_check.py --no-play        # measure only, for a headless run
 
-Before running: SW1 ON puts MIC Bias on J1, and J1 is RINPUT3, so the mic lands on R.
+Before running: the MIC-R BIAS switch ON puts MIC Bias on IN R, so the mic lands on R.
 """
 import argparse
 import os
@@ -25,20 +25,21 @@ except ImportError:
     sys.exit("needs numpy: sudo apt install python3-numpy")
 
 from audio_hat_constants import (ALSA_CARD_NAME, BOARD_NAME, BOARD_REV, CHANNELS,  # noqa: E402
-                                 JACKS, MICBIAS_V, SAMPLE_FORMAT, SAMPLE_RATE_HZ)
+                                 JACKS, MICBIAS_SWITCH_LABEL, MICBIAS_V, SAMPLE_FORMAT,
+                                 SAMPLE_RATE_HZ)
 from audio_hat_constants import CLIP_DB, FLOOR_DB, QUIET_DB  # noqa: E402,F401
 from audio_loopback import DTYPE, SCALE, db  # noqa: E402
 
 
 
 def mic_jack():
-    """The input jack on R, which is where MIC Bias and SW1 act."""
-    return next((j for j, d in JACKS.items()
-                 if d["dir"] == "in" and d["channel"] == "R"), "J1")
+    """The printed name of the input jack on R, where MIC Bias acts."""
+    return next((d["label"] for d in JACKS.values()
+                 if d["dir"] == "in" and d["channel"] == "R"), "IN R")
 
 
 def out_jack():
-    return next((j for j, d in JACKS.items() if d["channel"] == "LR"), "J4")
+    return next((d["label"] for d in JACKS.values() if d["channel"] == "LR"), "OUT L/R")
 
 
 def main():
@@ -54,7 +55,8 @@ def main():
 
     print("=== %s %s ===" % (BOARD_NAME, BOARD_REV))
     print("%s  %d Hz %s %dch" % (a.device, SAMPLE_RATE_HZ, SAMPLE_FORMAT, CHANNELS))
-    print("mic on %s (SW1 ON feeds it ~%.2f V of MIC Bias) · it lands on R" % (mic, MICBIAS_V))
+    print("mic on %s (the %s switch ON feeds it ~%.2f V of MIC Bias) · it lands on R"
+          % (mic, MICBIAS_SWITCH_LABEL, MICBIAS_V))
     print("playback on %s\n" % out)
 
     fd, path = tempfile.mkstemp(suffix=".raw")
@@ -89,7 +91,7 @@ def main():
             elif pk < FLOOR_DB:
                 tail = " — under the %.0f dBFS floor: nothing here" % FLOOR_DB
             elif pk < QUIET_DB:
-                tail = " — above the floor but very low; check SW1 and the gain"
+                tail = " — above the floor but very low; check the %s switch and the gain" % MICBIAS_SWITCH_LABEL
             print("  %s  rms %6.1f  peak %6.1f dBFS%s" % (name, rms, pk, tail))
             verdict[name] = pk
 
@@ -106,7 +108,7 @@ def main():
 
         r = verdict.get("R", -999)
         if r < FLOOR_DB:
-            print("\nThe mic captured nothing on R. In order: SW1 ON, the plug fully seated in "
+            print("\nThe mic captured nothing on R. In order: the " + MICBIAS_SWITCH_LABEL + " switch ON, the plug fully seated in "
                   "%s, and MIC Bias in the mixer (check_mixer turns it on)." % mic)
             return 1
         if r < QUIET_DB:

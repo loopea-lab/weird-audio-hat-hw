@@ -68,11 +68,10 @@ def main():
     print("%s  %d Hz %s %dch  ·  %d-frame periods (%.1f ms)"
           % (a.device, SAMPLE_RATE_HZ, SAMPLE_FORMAT, CHANNELS, a.period,
              a.period / SAMPLE_RATE_HZ * 1000.0))
-    # J1 is RINPUT3, so a mic plugged into it shows on R. Saying "watch L" sent the operator
-    # to the channel the mic is NOT on, which reads exactly like a dead mic.
-    mic_ch = next((j for j, d in JACKS.items() if d["dir"] == "in" and d["channel"] == "R"), "J1")
-    print("floor %.0f dBFS is the ':' mark · a mic on %s shows on R, line in on J5 shows on L\n"
-          % (FLOOR_DB, mic_ch))
+    # A mic on IN R shows on R: watching L instead reads exactly like a dead mic.
+    jack = {d["channel"]: d["label"] for d in JACKS.values() if d["dir"] == "in"}
+    print("floor %.0f dBFS is the ':' mark · a mic on %s shows on R, line in on %s shows on L\n"
+          % (FLOOR_DB, jack["R"], jack["L"]))
 
     try:
         rec = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)

@@ -33,16 +33,20 @@ addresses of the older chips.
 
 ## Connectors
 
-| Ref | Type | Carries |
-|-----|------|---------|
-| J5 | 3.5 mm jack | Line in L (tip) |
-| J1 | 3.5 mm jack | Line in R (tip) — MICBIAS when SW1 is on |
-| J4 | 3.5 mm stereo jack | Line / headphone out — tip L, ring R \* |
-| J2 | 3.5 mm jack | Mono out (tip) |
-| J6 | 1×4 header | Line in from a panel (used by the Weird Eurorack panel) — 1 GND · 2 R · 3 GND · 4 L |
-| J7 | 1×4 header | Line out to a panel (used by the Weird Eurorack panel) — 1 GND · 2 R · 3 GND · 4 L |
-| J3 | 2×20 Pi header | I2C (3, 5) · I2S (12, 35, 38, 40) · GPCLK0 (7) · 3.3 V / 5 V. Free GPIOs (BCM): 5–17 and 22–27, including SPI0 and the UART; 0 and 1 are left for a HAT ID EEPROM |
-| SW1 | slide switch | MICBIAS onto J1 |
+Names as printed on the board. The schematic designator is in the last column.
+
+| On the board | Type | Carries | Schematic |
+|---|---|---|---|
+| **IN L** | 3.5 mm jack | Line in L (tip) | J5 |
+| **IN R** | 3.5 mm jack | Line in R (tip), or an electret mic with **MIC-R BIAS** on | J1 |
+| **OUT L/R** | 3.5 mm stereo jack | Line / headphone out — tip L, ring R \* | J4 |
+| **OUT MONO** | 3.5 mm jack | Mono out (tip) — the sum of L and R | J2 |
+| **MIC-R BIAS** | slide switch | Puts MICBIAS on **IN R** | SW1 |
+| 4-pin header, left edge | 1×4 header | Line in from a panel — 1 GND · 2 R · 3 GND · 4 L | J6 |
+| 4-pin header, right edge | 1×4 header | Line out to a panel — 1 GND · 2 R · 3 GND · 4 L | J7 |
+| 40-pin header | 2×20 Pi header | I2C (3, 5) · I2S (12, 35, 38, 40) · GPCLK0 (7) · 3.3 V / 5 V. Free GPIOs (BCM): 5–17 and 22–27, including SPI0 and the UART; 0 and 1 are left for a HAT ID EEPROM | J3 |
+
+Left and right edges as seen from the top, with the jacks facing you.
 
 \* R1.1: L and R are swapped; the driver's `DAC L/R Swap` control corrects it.
 
@@ -53,9 +57,10 @@ It covers recording, playback, routing and gain.
 
 - **Inputs are single-ended** (LINPUT3 / RINPUT3). The codec's differential mode is not wired.
 - **Headphone out** is AC-coupled; it drives 32 Ω headphones or a line input.
-- **J1 is line or microphone, chosen by SW1:** off = line input; on = electret mic input, biased at
-  ~3 V through 1 kΩ. The driver keeps `MIC Bias` on, so SW1 is the only thing to set. Don't
-  plug a line source into J1 with SW1 on: it loads the source and puts 3 V DC on it.
+- **IN R is line or microphone, chosen by the MIC-R BIAS switch:** off = line input; on = electret
+  mic input, biased at ~3 V through 1 kΩ. The driver keeps `MIC Bias` on, so the switch is the only
+  thing to set. Don't plug a line source into IN R with the switch on: it loads the source and puts
+  3 V DC on it.
 
 ## Troubleshooting
 
@@ -71,7 +76,7 @@ looks like dead hardware. If the format is right, the input path is muted — se
 - [Weird Piano HAT](https://github.com/loopea-lab/weird-piano-hat) — keys and pots, an
   instrument with Pure Data.
 - [Weird MCP Inputs](https://github.com/loopea-lab/weird-mcp-inputs) + Control Board + panel —
-  a Eurorack module. J6 / J7 carry audio to the panel; the stacking header passes the MCP's
+  a Eurorack module. The two 4-pin headers carry audio to the panel; the stacking header passes the MCP's
   signals through, so use a good one.
 
 ## License

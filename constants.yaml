@@ -77,14 +77,18 @@ capture:
 jacks:
   JACKS:
     value:
-      J5: {dir: in, channel: L, pin: LINPUT3}
-      J1: {dir: in, channel: R, pin: RINPUT3}
-      J4: {dir: out, channel: LR, pin: HP_L/HP_R}
-      J2: {dir: out, channel: mono, pin: OUT3}
+      J5: {dir: in, channel: L, pin: LINPUT3, label: IN L}
+      J1: {dir: in, channel: R, pin: RINPUT3, label: IN R}
+      J4: {dir: out, channel: LR, pin: HP_L/HP_R, label: OUT L/R}
+      J2: {dir: out, channel: mono, pin: OUT3, label: OUT MONO}
     source: netlist
     note: >-
-      Inputs are single-ended (LINPUT1/2 and RINPUT1/2 unconnected), so differential
-      mode is not possible. J1 is the only one with MICBIAS, switched by SW1.
+      `label` is what is printed next to each jack; the J designators are not on the board.
+      Inputs are single-ended (LINPUT1/2 and RINPUT1/2 unconnected), so no differential mode.
+  MICBIAS_SWITCH_LABEL:
+    value: MIC-R BIAS
+    source: copper
+    note: printed next to SW1, which puts MICBIAS on the IN R jack
 
 loopback:
   LOOPBACK_NO_SIGNAL:
@@ -146,3 +150,8 @@ measurement:
     unit: dBFS
     source: design_target
     note: above the floor but too low to call a working mic
+  MONITOR_GAIN_DB:
+    value: -12.0
+    unit: dB
+    source: design_target
+    note: bench loopback gain; the monitored input never leaves louder than -12 dBFS
