@@ -27,9 +27,9 @@ except ImportError:
 
 from audio_hat_constants import (ALSA_CARD_NAME, BOARD_NAME, BOARD_REV, CHANNELS,  # noqa: E402
                                  JACKS, SAMPLE_FORMAT, SAMPLE_RATE_HZ)
-from audio_loopback import DTYPE, FLOOR_DB, SCALE, db  # noqa: E402
+from audio_hat_constants import CLIP_DB, FLOOR_DB, QUIET_DB  # noqa: E402,F401
+from audio_loopback import DTYPE, SCALE, db  # noqa: E402
 
-CLIP_DB = -0.5          # a sample this close to full scale is clipping
 BAR_WIDTH = 32
 BAR_TOP_DB = 0.0
 BAR_BOTTOM_DB = -72.0   # a bit under the floor, so the floor is visible as a mark

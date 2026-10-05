@@ -20,12 +20,12 @@ import sys
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from audio_hat_constants import (ALSA_CARD_NAME, BOARD_NAME, BOARD_REV, CHANNELS,  # noqa: E402
+from audio_hat_constants import (ALSA_CARD_NAME, BOARD_NAME, BOARD_REV, CHANNELS, FLOOR_DB,  # noqa: E402
+                                 TONE_AMPLITUDE, TONE_HZ,
                                  SAMPLE_FORMAT, SAMPLE_RATE_HZ)
 
 SR = SAMPLE_RATE_HZ
 SCALE = float(2 ** 31)
-AMPLITUDE = 0.30
 DUR = 2.5
 COMMON = ["-f", SAMPLE_FORMAT, "-r", str(SR), "-c", str(CHANNELS), "-t", "raw"]
 
@@ -45,7 +45,7 @@ def read_mixer(control):
 def tone(channel, hz):
     n = int(SR * DUR)
     t = np.arange(n) / SR
-    s = (AMPLITUDE * np.sin(2 * np.pi * hz * t) * (SCALE - 1)).astype("<i4")
+    s = (TONE_AMPLITUDE * np.sin(2 * np.pi * hz * t) * (SCALE - 1)).astype("<i4")
     z = np.zeros(n, dtype="<i4")
     return np.column_stack([s, z] if channel == "L" else [z, s]).tobytes()
 
@@ -74,9 +74,9 @@ def run_once(channel, hz, card):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("-c", "--channel", choices=("L", "R"), default="L")
-    p.add_argument("-f", "--freq", type=float, default=1000.0)
+    p.add_argument("-f", "--freq", type=float, default=float(TONE_HZ))
     p.add_argument("-D", "--device", default="hw:%s" % ALSA_CARD_NAME)
-    p.add_argument("--floor", type=float, default=-60.0, help="dBFS below which there is no signal")
+    p.add_argument("--floor", type=float, default=FLOOR_DB, help="dBFS below which there is no signal")
     a = p.parse_args()
 
     print("=== %s %s ===" % (BOARD_NAME, BOARD_REV))

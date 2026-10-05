@@ -53,3 +53,14 @@ LOOPBACK_SEPARATION = 'separation'
 # --- micbias ---
 MICBIAS_V = 2.97  # (derived) V 0.9 × AVDD (3.3 V), datasheet WM8960
 MICBIAS_TOLERANCE = 0.05  # (datasheet) ±5 %, so 2.82–3.12 V
+
+# --- measurement ---
+TONE_HZ = 1000  # (design_target) Hz test tone for every loopback and output check
+TONE_AMPLITUDE = 0.3  # (design_target) fraction of full scale, well below clipping
+FLOOR_DB = -60.0  # (design_target) dBFS below this there is only noise, not signal
+# (design_target) dB the other channel this much louder means crossed; within it means mixed
+CROSSTALK_MARGIN_DB = 20.0
+# (design_target) dBFS an RMS level above this is a warning to lower the gain
+NEAR_CLIP_DB = -3.0
+CLIP_DB = -0.5  # (design_target) dBFS a peak this close to full scale is clipping
+QUIET_DB = -40.0  # (design_target) dBFS above the floor but too low to call a working mic

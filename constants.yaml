@@ -110,3 +110,39 @@ micbias:
     value: 0.05
     source: datasheet
     note: ±5 %, so 2.82–3.12 V
+
+measurement:
+  TONE_HZ:
+    value: 1000
+    unit: Hz
+    source: design_target
+    note: test tone for every loopback and output check
+  TONE_AMPLITUDE:
+    value: 0.3
+    source: design_target
+    note: fraction of full scale, well below clipping
+  FLOOR_DB:
+    value: -60.0
+    unit: dBFS
+    source: design_target
+    note: below this there is only noise, not signal
+  CROSSTALK_MARGIN_DB:
+    value: 20.0
+    unit: dB
+    source: design_target
+    note: the other channel this much louder means crossed; within it means mixed
+  NEAR_CLIP_DB:
+    value: -3.0
+    unit: dBFS
+    source: design_target
+    note: an RMS level above this is a warning to lower the gain
+  CLIP_DB:
+    value: -0.5
+    unit: dBFS
+    source: design_target
+    note: a peak this close to full scale is clipping
+  QUIET_DB:
+    value: -40.0
+    unit: dBFS
+    source: design_target
+    note: above the floor but too low to call a working mic

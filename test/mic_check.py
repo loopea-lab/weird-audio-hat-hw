@@ -26,10 +26,9 @@ except ImportError:
 
 from audio_hat_constants import (ALSA_CARD_NAME, BOARD_NAME, BOARD_REV, CHANNELS,  # noqa: E402
                                  JACKS, MICBIAS_V, SAMPLE_FORMAT, SAMPLE_RATE_HZ)
-from audio_loopback import DTYPE, FLOOR_DB, SCALE, db  # noqa: E402
+from audio_hat_constants import CLIP_DB, FLOOR_DB, QUIET_DB  # noqa: E402,F401
+from audio_loopback import DTYPE, SCALE, db  # noqa: E402
 
-CLIP_DB = -0.5
-QUIET_DB = -40.0        # above the floor but too low to call a working mic
 
 
 def mic_jack():

@@ -19,15 +19,14 @@ import sys
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from audio_hat_constants import (ALSA_CARD_NAME, BOARD_NAME, BOARD_REV, CHANNELS, LOOPBACK_CROSSED,  # noqa: E402
-                                 LOOPBACK_NO_SIGNAL, LOOPBACK_SEPARATION, SAMPLE_FORMAT,
-                                 SAMPLE_RATE_HZ)
+from audio_hat_constants import (ALSA_CARD_NAME, BOARD_NAME, BOARD_REV, CHANNELS,  # noqa: E402
+                                 CROSSTALK_MARGIN_DB, FLOOR_DB, LOOPBACK_CROSSED,
+                                 LOOPBACK_NO_SIGNAL, LOOPBACK_SEPARATION, NEAR_CLIP_DB,
+                                 SAMPLE_FORMAT, SAMPLE_RATE_HZ, TONE_AMPLITUDE, TONE_HZ)
 
-AMPLITUDE = 0.30          # well below clipping
 TONE_SECONDS = 3.0
 RECORD_SECONDS = 4.0
 WINDOW = (0.7, 2.7)     # steady part, past the stream start
-FLOOR_DB = -60.0     # below this there is only noise
 
 DTYPE = {"S32_LE": "<i4", "S16_LE": "<i2"}[SAMPLE_FORMAT]
 SCALE = float(2 ** (8 * np.dtype(DTYPE).itemsize - 1))
@@ -36,7 +35,7 @@ SCALE = float(2 ** (8 * np.dtype(DTYPE).itemsize - 1))
 def tone(channel, hz):
     n = int(SAMPLE_RATE_HZ * TONE_SECONDS)
     t = np.arange(n) / SAMPLE_RATE_HZ
-    s = (AMPLITUDE * np.sin(2 * np.pi * hz * t) * (SCALE - 1)).astype(DTYPE)
+    s = (TONE_AMPLITUDE * np.sin(2 * np.pi * hz * t) * (SCALE - 1)).astype(DTYPE)
     z = np.zeros(n, dtype=DTYPE)
     return np.column_stack([s, z] if channel == "L" else [z, s]).tobytes()
 
@@ -77,20 +76,20 @@ def verdict(channel, left, right):
         v = "%s on either channel" % LOOPBACK_NO_SIGNAL
         ps.append("%s: no signal arrives (max %.1f dBFS). Check the DAC is routed and the "
                   "inputs are not muted." % (channel, max(expected, other)))
-    elif other > expected + 20:
+    elif other > expected + CROSSTALK_MARGIN_DB:
         v = "%s: out on %s, in on %s" % (LOOPBACK_CROSSED, channel, other_name)
         ps.append("%s: the signal shows up on %s, %.1f dB above %s"
                   % (channel, other_name, other - expected, channel))
     elif expected < FLOOR_DB:
         v = "%s on %s" % (LOOPBACK_NO_SIGNAL, channel)
         ps.append("%s: no signal arrives (%.1f dBFS)" % (channel, expected))
-    elif other > expected - 20:
+    elif other > expected - CROSSTALK_MARGIN_DB:
         v = "channels mixed (separation %.1f dB)" % (expected - other)
         ps.append("%s: only %.1f dB of separation" % (channel, expected - other))
     else:
         v = "ok, %s %.1f dB" % (LOOPBACK_SEPARATION, expected - other)
 
-    if max(expected, other) > -3.0:
+    if max(expected, other) > NEAR_CLIP_DB:
         v += "  ⚠ near clipping"
         ps.append("%s: the input is at %.1f dBFS, nearly clipping: lower "
                   "'Input Line' or the amplitude" % (channel, max(expected, other)))
@@ -103,13 +102,13 @@ def _header():
 
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("-f", "--freq", type=float, default=1000.0)
+    p.add_argument("-f", "--freq", type=float, default=float(TONE_HZ))
     p.add_argument("-D", "--device", default="hw:%s" % ALSA_CARD_NAME)
     a = p.parse_args()
 
     _header()
     print("%g Hz tone at %.0f%% of full scale, %s @ %d Hz"
-          % (a.freq, AMPLITUDE * 100, SAMPLE_FORMAT, SAMPLE_RATE_HZ))
+          % (a.freq, TONE_AMPLITUDE * 100, SAMPLE_FORMAT, SAMPLE_RATE_HZ))
     print()
     print("  %-10s %10s %10s   %s" % ("sent", "RMS L", "RMS R", "verdict"))
 
