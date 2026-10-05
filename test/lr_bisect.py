@@ -20,7 +20,7 @@ import sys
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from audio_hat_constants import (BOARD_NAME, BOARD_REV, CHANNELS,  # noqa: E402
+from audio_hat_constants import (ALSA_CARD_NAME, BOARD_NAME, BOARD_REV, CHANNELS,  # noqa: E402
                                  SAMPLE_FORMAT, SAMPLE_RATE_HZ)
 
 SR = SAMPLE_RATE_HZ
@@ -31,11 +31,11 @@ COMMON = ["-f", SAMPLE_FORMAT, "-r", str(SR), "-c", str(CHANNELS), "-t", "raw"]
 
 
 def amix(control, value):
-    subprocess.run(["amixer", "-c1", "-q", "sset", control, value], check=False)
+    subprocess.run(["amixer", "-c", ALSA_CARD_NAME, "-q", "sset", control, value], check=False)
 
 
 def read_mixer(control):
-    r = subprocess.run(["amixer", "-c1", "sget", control], capture_output=True, text=True)
+    r = subprocess.run(["amixer", "-c", ALSA_CARD_NAME, "sget", control], capture_output=True, text=True)
     for line in r.stdout.splitlines():
         if "%]" in line:
             return line.split("[")[1].split("]")[0]
@@ -75,7 +75,7 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("-c", "--channel", choices=("L", "R"), default="L")
     p.add_argument("-f", "--freq", type=float, default=1000.0)
-    p.add_argument("-D", "--device", default="hw:1,0")
+    p.add_argument("-D", "--device", default="hw:%s" % ALSA_CARD_NAME)
     p.add_argument("--floor", type=float, default=-60.0, help="dBFS below which there is no signal")
     a = p.parse_args()
 

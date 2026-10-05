@@ -19,7 +19,7 @@ import sys
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from audio_hat_constants import (BOARD_NAME, BOARD_REV, CHANNELS, LOOPBACK_CROSSED,  # noqa: E402
+from audio_hat_constants import (ALSA_CARD_NAME, BOARD_NAME, BOARD_REV, CHANNELS, LOOPBACK_CROSSED,  # noqa: E402
                                  LOOPBACK_NO_SIGNAL, LOOPBACK_SEPARATION, SAMPLE_FORMAT,
                                  SAMPLE_RATE_HZ)
 
@@ -104,7 +104,7 @@ def _header():
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("-f", "--freq", type=float, default=1000.0)
-    p.add_argument("-D", "--device", default="hw:1,0")
+    p.add_argument("-D", "--device", default="hw:%s" % ALSA_CARD_NAME)
     a = p.parse_args()
 
     _header()
