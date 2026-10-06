@@ -66,5 +66,11 @@ CROSSTALK_MARGIN_DB = 20.0
 NEAR_CLIP_DB = -3.0
 CLIP_DB = -0.5  # (design_target) dBFS a peak this close to full scale is clipping
 QUIET_DB = -40.0  # (design_target) dBFS above the floor but too low to call a working mic
+# (design_target) Mixer control per input: 0 mute, 1-7 line path −12…+6 dB, 8-9 PGA + boost (+13
+# / +22 dB net). The driver picks the path.
+IN_CONTROLS = {'L': 'IN L Capture Volume', 'R': 'IN R Capture Volume'}
+# (design_target) `IN L/R Capture Volume` at boot (−3 dB, line path). Must match
+# WM8960_IN_DEFAULT in the driver and the saved mixer state.
+IN_GAIN_DEFAULT = 4
 # (design_target) dB bench loopback gain; the monitored input never leaves louder than -12 dBFS
 MONITOR_GAIN_DB = -12.0

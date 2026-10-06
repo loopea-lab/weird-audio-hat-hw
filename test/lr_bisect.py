@@ -20,7 +20,7 @@ import sys
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from audio_hat_constants import (ALSA_CARD_NAME, BOARD_NAME, BOARD_REV, CHANNELS, FLOOR_DB,  # noqa: E402
+from audio_hat_constants import (IN_CONTROLS, IN_GAIN_DEFAULT, ALSA_CARD_NAME, BOARD_NAME, BOARD_REV, CHANNELS, FLOOR_DB,  # noqa: E402
                                  TONE_AMPLITUDE, TONE_HZ,
                                  SAMPLE_FORMAT, SAMPLE_RATE_HZ)
 
@@ -31,15 +31,19 @@ COMMON = ["-f", SAMPLE_FORMAT, "-r", str(SR), "-c", str(CHANNELS), "-t", "raw"]
 
 
 def amix(control, value):
-    subprocess.run(["amixer", "-c", ALSA_CARD_NAME, "-q", "sset", control, value], check=False)
+    r = subprocess.run(["amixer", "-c", ALSA_CARD_NAME, "-q", "cset", "name=%s" % control, str(value)],
+                       capture_output=True, text=True)
+    if r.returncode:
+        raise SystemExit("could not set %r: %s" % (control, r.stderr.strip()))
 
 
 def read_mixer(control):
-    r = subprocess.run(["amixer", "-c", ALSA_CARD_NAME, "sget", control], capture_output=True, text=True)
+    r = subprocess.run(["amixer", "-c", ALSA_CARD_NAME, "cget", "name=%s" % control],
+                       capture_output=True, text=True)
     for line in r.stdout.splitlines():
-        if "%]" in line:
-            return line.split("[")[1].split("]")[0]
-    return "100%"
+        if ": values=" in line:
+            return line.split("=", 1)[1]
+    raise SystemExit("the card has no %r control: is the driver installed?" % control)
 
 
 def tone(channel, hz):
@@ -82,13 +86,13 @@ def main():
     print("=== %s %s ===" % (BOARD_NAME, BOARD_REV))
     print("playing on ALSA-%s at %g Hz\n" % (a.channel, a.freq))
 
-    previous = {c: read_mixer(c) for c in ("Left Input Line", "Right Input Line")}
+    previous = {c: read_mixer(c) for c in IN_CONTROLS.values()}
     entered_on = None
     try:
         print("  %-30s %9s %9s" % ("configuration", "ALSA L", "ALSA R"))
-        for side, l, r in [("L", "100%", "0%"), ("R", "0%", "100%")]:
-            amix("Left Input Line", l)
-            amix("Right Input Line", r)
+        for side in ("L", "R"):
+            for ch, control in IN_CONTROLS.items():
+                amix(control, IN_GAIN_DEFAULT if ch == side else 0)
             levels = run_once(a.channel, a.freq, a.device)
             if levels is None:
                 print("  empty or short capture")
@@ -103,8 +107,8 @@ def main():
 
     print()
     if entered_on is None:
-        print("No signal on either input. Crossing is not the problem: check the DAC is")
-        print("routed ('Out Mixer DAC' on) and the cable is in.")
+        print("No signal on either input. Crossing is not the problem: check the cable is in")
+        print("and the driver is loaded.")
         return 1
 
     side, levels = entered_on

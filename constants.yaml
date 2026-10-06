@@ -150,6 +150,18 @@ measurement:
     unit: dBFS
     source: design_target
     note: above the floor but too low to call a working mic
+  IN_CONTROLS:
+    value: {L: IN L Capture Volume, R: IN R Capture Volume}
+    source: design_target
+    note: >-
+      Mixer control per input: 0 mute, 1-7 line path −12…+6 dB, 8-9 PGA + boost (+13 / +22 dB
+      net). The driver picks the path.
+  IN_GAIN_DEFAULT:
+    value: 4
+    source: design_target
+    note: >-
+      `IN L/R Capture Volume` at boot (−3 dB, line path). Must match WM8960_IN_DEFAULT in the
+      driver and the saved mixer state.
   MONITOR_GAIN_DB:
     value: -12.0
     unit: dB

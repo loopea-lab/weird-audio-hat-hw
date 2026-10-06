@@ -19,7 +19,7 @@ import sys
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from audio_hat_constants import (ALSA_CARD_NAME, BOARD_NAME, BOARD_REV, CHANNELS,  # noqa: E402
+from audio_hat_constants import (IN_CONTROLS, ALSA_CARD_NAME, BOARD_NAME, BOARD_REV, CHANNELS,  # noqa: E402
                                  CROSSTALK_MARGIN_DB, FLOOR_DB, LOOPBACK_CROSSED,
                                  LOOPBACK_NO_SIGNAL, LOOPBACK_SEPARATION, NEAR_CLIP_DB,
                                  SAMPLE_FORMAT, SAMPLE_RATE_HZ, TONE_AMPLITUDE, TONE_HZ)
@@ -92,7 +92,7 @@ def verdict(channel, left, right):
     if max(expected, other) > NEAR_CLIP_DB:
         v += "  ⚠ near clipping"
         ps.append("%s: the input is at %.1f dBFS, nearly clipping: lower "
-                  "'Input Line' or the amplitude" % (channel, max(expected, other)))
+                  "'%s' or the amplitude" % (channel, max(expected, other), IN_CONTROLS[channel]))
     return v, ps
 
 
